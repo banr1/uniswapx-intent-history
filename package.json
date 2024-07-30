@@ -2,6 +2,14 @@
   "name": "watch-uniswapx-api",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/banr1/watch-uniswapx-api.git"
+  },
+  "author": {
+    "name": "banri",
+    "email": "banri.yanahama@gmail.com"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,6 +19,7 @@
   },
   "dependencies": {
     "@uniswap/uniswapx-sdk": "2.0.1-alpha.10",
+    "axios": "^1.7.2",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18"
@@ -26,8 +35,8 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-unused-imports": "^3",
-    "prettier": "^3.3.3",
     "postcss": "^8",
+    "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4"
   }
