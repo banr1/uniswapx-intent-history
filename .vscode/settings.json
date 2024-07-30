@@ -1,0 +1,16 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never",
+    "source.fixAll.eslint": "always"
+  },
+  "prettier.configPath": ".prettierrc.js",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+}
