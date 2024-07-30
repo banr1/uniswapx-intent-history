@@ -1,10 +1,10 @@
 {
-  "name": "watch-uniswapx-api",
+  "name": "uniswapx-watcher",
   "version": "0.1.0",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/banr1/watch-uniswapx-api.git"
+    "url": "https://github.com/banr1/uniswapx-watcher.git"
   },
   "author": {
     "name": "banri",
