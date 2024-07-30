@@ -12,3 +12,5 @@ export const formatTimestamp = (date: Date) => {
     hour12: false,
   });
 };
+
+export const shortenAddress = (address: string) => `${address.slice(0, 6)} ... ${address.slice(-4)}`;

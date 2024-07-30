@@ -4,14 +4,20 @@ import { DutchOrder as DutchIntent } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+import { ERC20 } from '@/constants/erc20';
 import { IntentStatus } from '@/types/IntentStatus';
 import { RawIntent } from '@/types/RawIntent';
-import { formatTimestamp, numToDate } from '@/utils';
+import { formatTimestamp, numToDate, shortenAddress } from '@/utils';
+
+import { EtherscanLink } from './EtherscanLink';
 
 type FetchOrdersParams = {
   orderStatus: IntentStatus;
   chainId: 1;
   limit?: number;
+  sortKey?: 'createdAt';
+  desc?: boolean;
+  sort?: string;
   orderHash?: string;
   orderHashes?: string[];
   swapper?: string;
@@ -27,11 +33,19 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
   const [intents, setIntents] = useState<DutchIntent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const chainId = 1;
 
   useEffect(() => {
     const fetchIntents_ = async () => {
       try {
-        const decodedIntents = await fetchIntents({ orderStatus: props.status, chainId: 1, limit: 50 });
+        const decodedIntents = await fetchIntents({
+          orderStatus: props.status,
+          chainId,
+          limit: 5,
+          sortKey: 'createdAt',
+          desc: true,
+          sort: 'sort=lt(9000000000)',
+        });
         setIntents(decodedIntents);
         setLoading(false);
       } catch (err) {
@@ -50,20 +64,49 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
   if (error) return <div className='text-center mt-8 text-red-500'>{error}</div>;
 
   return (
-    <table className='w-full border-collapse mb-8'>
+    <table className='w-full border-collapse mb-8 text-gray-800'>
       <thead>
-        <tr className='bg-gray-200'>
-          <th className='border p-2 text-left'>Order Hash</th>
-          <th className='border p-2 text-left'>Decay Start Time</th>
-          <th className='border p-2 text-left'>Decay End Time</th>
+        <tr className='bg-purple-300'>
+          <th className='border p-2 text-left'>Intent Hash</th>
+          <th className='border p-2 text-left'>Input Token</th>
+          <th className='border p-2 text-left'>Output Token</th>
+          <th className='border p-2 text-left'>Exclusive Filler</th>
+          <th className='border p-2 text-left'>Decay Time</th>
         </tr>
       </thead>
       <tbody>
         {intents.map((intent) => (
-          <tr key={intent.hash()} className='bg-gray-100 hover:bg-gray-200'>
-            <td className='border p-2'>{intent.hash()}</td>
-            <td className='border p-2'>{formatTimestamp(numToDate(intent.info.decayStartTime))}</td>
-            <td className='border p-2'>{formatTimestamp(numToDate(intent.info.decayEndTime))}</td>
+          <tr key={intent.hash()} className='bg-purple-50 hover:bg-purple-100'>
+            <td className='border p-2'>{shortenAddress(intent.hash())}</td>
+            <td className='border p-2'>
+              <EtherscanLink
+                name={ERC20[chainId][intent.info.input.token]}
+                address={intent.info.input.token}
+                category='address'
+              />
+              {` (${intent.info.input.startAmount.toString()} -> ${intent.info.input.endAmount.toString()})`}
+            </td>
+            <td className='border p-2'>
+              <EtherscanLink
+                name={ERC20[chainId][intent.info.outputs[0].token]}
+                address={intent.info.outputs[0].token}
+                category='address'
+              />
+              {` (${intent.info.outputs[0].startAmount.toString()} -> ${intent.info.outputs[0].endAmount.toString()})`}
+            </td>
+            <td className='border p-2'>
+              <EtherscanLink
+                name={shortenAddress(intent.info.exclusiveFiller)}
+                address={intent.info.exclusiveFiller}
+                category='address'
+              />
+            </td>
+            <td className='border p-2'>
+              {formatTimestamp(numToDate(intent.info.decayStartTime)) +
+                // ' - ' +
+                // formatTimestamp(numToDate(intent.info.decayEndTime)) +
+                ` (${intent.info.decayEndTime - intent.info.decayStartTime}s)`}
+            </td>
           </tr>
         ))}
       </tbody>
