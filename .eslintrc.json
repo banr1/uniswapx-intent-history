@@ -13,7 +13,17 @@
     "plugin:import/typescript"
   ],
   "plugins": ["@typescript-eslint", "prettier", "unused-imports", "import"],
-  "ignorePatterns": ["node_modules/", ".next/", ".out/"],
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    ".out/",
+    "tailwind.config.ts",
+    "next.config.mjs",
+    "package.json",
+    "package-lock.json",
+    "postcss.config.mjs",
+    "tailwind.config.ts"
+  ],
   "rules": {
     "@next/next/no-img-element": "off",
     "@typescript-eslint/no-explicit-any": "off",

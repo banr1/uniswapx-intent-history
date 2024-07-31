@@ -5,7 +5,7 @@
 import { useState } from 'react';
 
 import IntentTable from '@/components/IntentTable';
-import { formatTimestamp } from '@/utils';
+import { formatTimestamp } from '@/lib/utils';
 
 export default function Home() {
   const [updatedAt, setUpdatedAt] = useState(new Date());

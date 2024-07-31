@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 
 import { API_ENDPOINT } from '@/constants/apiEndpoint';
 import { ERC20 } from '@/constants/erc20';
+import { formatTimestamp, numToDate, shortenAddress } from '@/lib/utils';
 import { IntentStatus } from '@/types/IntentStatus';
 import { RawIntent } from '@/types/RawIntent';
-import { formatTimestamp, numToDate, shortenAddress } from '@/utils';
 
 import { EtherscanLink } from './EtherscanLink';
 
