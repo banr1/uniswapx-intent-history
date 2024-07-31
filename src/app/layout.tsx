@@ -7,8 +7,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Watch UniswapX API',
-  description: 'Watch UniswapX API',
+  title: 'UniswapX Watcher',
+  description: 'UniswapX Watcher',
 };
 
 export default function RootLayout({

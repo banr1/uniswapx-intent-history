@@ -4,6 +4,7 @@ import { DutchOrder as DutchIntent } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+import { API_ENDPOINT } from '@/constants/apiEndpoint';
 import { ERC20 } from '@/constants/erc20';
 import { IntentStatus } from '@/types/IntentStatus';
 import { RawIntent } from '@/types/RawIntent';
@@ -22,10 +23,11 @@ type FetchOrdersParams = {
   orderHashes?: string[];
   swapper?: string;
   filler?: string;
+  cursor?: string;
 };
 
 async function fetchIntents(params: FetchOrdersParams): Promise<DutchIntent[]> {
-  const response = await axios.get<{ orders: RawIntent[] }>('https://api.uniswap.org/v2/orders', { params });
+  const response = await axios.get<{ orders: RawIntent[] }>(API_ENDPOINT, { params });
   return response.data.orders.map((order) => DutchIntent.parse(order.encodedOrder, order.chainId));
 }
 
@@ -45,6 +47,8 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
           sortKey: 'createdAt',
           desc: true,
           sort: 'sort=lt(9000000000)',
+          // cursor:
+          //   'eyJjaGFpbklkIjoxLCJjcmVhdGVkQXQiOjE3MjIzODI3NDUsIm9yZGVySGFzaCI6IjB4ZTRlYTVlODhlNzA1MmE5ZWJhNmQxZGY1MDczMWYwNTNkY2U0YWU0NTlmZmRiMjkzMGYzN2Y5YTZlYmM1MjBjZiJ9',
         });
         setIntents(decodedIntents);
         setLoading(false);
@@ -79,20 +83,20 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
           <tr key={intent.hash()} className='bg-purple-50 hover:bg-purple-100'>
             <td className='border p-2'>{shortenAddress(intent.hash())}</td>
             <td className='border p-2'>
+              {`${intent.info.input.startAmount.toString()} `}
               <EtherscanLink
-                name={ERC20[chainId][intent.info.input.token]}
+                name={ERC20[chainId][intent.info.input.token].name || shortenAddress(intent.info.input.token)}
                 address={intent.info.input.token}
                 category='address'
               />
-              {` (${intent.info.input.startAmount.toString()} -> ${intent.info.input.endAmount.toString()})`}
             </td>
             <td className='border p-2'>
+              {`${intent.info.outputs[0].startAmount.toString()} -> ${intent.info.outputs[0].endAmount.toString()} `}
               <EtherscanLink
-                name={ERC20[chainId][intent.info.outputs[0].token]}
+                name={ERC20[chainId][intent.info.outputs[0].token].name || shortenAddress(intent.info.outputs[0].token)}
                 address={intent.info.outputs[0].token}
                 category='address'
               />
-              {` (${intent.info.outputs[0].startAmount.toString()} -> ${intent.info.outputs[0].endAmount.toString()})`}
             </td>
             <td className='border p-2'>
               <EtherscanLink
