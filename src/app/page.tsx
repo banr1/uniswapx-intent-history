@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 
-import IntentTable from '@/components/IntentTable';
+import IntentTable from '@/components/intent-table';
 import { formatTimestamp } from '@/lib/utils';
 
 export default function Home() {

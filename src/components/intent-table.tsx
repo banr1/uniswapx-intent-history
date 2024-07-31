@@ -4,13 +4,13 @@ import { DutchOrder as DutchIntent } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { API_ENDPOINT } from '@/constants/apiEndpoint';
+import { API_ENDPOINT } from '@/constants/api-endpoint';
 import { ERC20 } from '@/constants/erc20';
 import { formatTimestamp, numToDate, shortenAddress } from '@/lib/utils';
-import { IntentStatus } from '@/types/IntentStatus';
-import { RawIntent } from '@/types/RawIntent';
+import { IntentStatus } from '@/types/intent-status';
+import { RawIntent } from '@/types/raw-intent';
 
-import { EtherscanLink } from './EtherscanLink';
+import { EtherscanLink } from './etherscan-link';
 
 type FetchOrdersParams = {
   orderStatus: IntentStatus;
