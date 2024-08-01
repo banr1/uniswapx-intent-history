@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { API_ENDPOINT } from '@/constants/api-endpoint';
 import { ERC20 } from '@/constants/erc20';
 import { formatTimestamp, numToDate, shortenAddress } from '@/lib/utils';
+import { ChainId } from '@/types/chain-id';
 import { IntentStatus } from '@/types/intent-status';
 import { RawIntent } from '@/types/raw-intent';
 
@@ -36,7 +37,7 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
   const [intents, setIntents] = useState<DutchIntent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const chainId = 1;
+  const chainId: ChainId = 1;
 
   useEffect(() => {
     const fetchIntents_ = async () => {
@@ -70,12 +71,12 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
 
   return (
     <Table>
-      <TableHeader>
+      <TableHeader className='bg-gray-100'>
         <TableRow>
-          <TableHead className='w-[100px]'>Intent Hash</TableHead>
-          <TableHead>Input Token</TableHead>
-          <TableHead>Output Token</TableHead>
-          <TableHead>Decay Time</TableHead>
+          <TableHead className='w-[150px]'>Intent Hash</TableHead>
+          <TableHead className='w-[200px]'>Input Token</TableHead>
+          <TableHead className='w-[400px]'>Output Token</TableHead>
+          <TableHead className='w-[200px]'>Decay Time</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -83,7 +84,7 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
           <TableRow key={intent.hash()}>
             <TableCell>{shortenAddress(intent.hash())}</TableCell>
             <TableCell>
-              {`${intent.info.input.startAmount.toString()} `}
+              {`${intent.info.input.startAmount.div(ERC20[chainId][intent.info.input.token].decimals)} `}
               <EtherscanLink
                 name={ERC20[chainId][intent.info.input.token].name || shortenAddress(intent.info.input.token)}
                 address={intent.info.input.token}
@@ -91,14 +92,17 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
               />
             </TableCell>
             <TableCell>
-              {`${intent.info.outputs[0].startAmount.toString()} -> ${intent.info.outputs[0].endAmount.toString()} `}
+              {`${intent.info.outputs[0].startAmount.div(ERC20[chainId][intent.info.outputs[0].token].decimals)} -> ${intent.info.outputs[0].endAmount.div(ERC20[chainId][intent.info.outputs[0].token].decimals)} `}
               <EtherscanLink
                 name={ERC20[chainId][intent.info.outputs[0].token].name || shortenAddress(intent.info.outputs[0].token)}
                 address={intent.info.outputs[0].token}
                 category='address'
               />
             </TableCell>
-            <TableCell>{formatTimestamp(numToDate(intent.info.decayStartTime))}</TableCell>
+            <TableCell>
+              {formatTimestamp(numToDate(intent.info.decayStartTime))} {` `}
+              <span className='text-xs'>{`${intent.info.decayEndTime - intent.info.decayStartTime}s`}</span>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
