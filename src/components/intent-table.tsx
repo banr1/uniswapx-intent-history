@@ -4,6 +4,7 @@ import { DutchOrder as DutchIntent } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { API_ENDPOINT } from '@/constants/api-endpoint';
 import { ERC20 } from '@/constants/erc20';
 import { formatTimestamp, numToDate, shortenAddress } from '@/lib/utils';
@@ -68,52 +69,39 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
   if (error) return <div className='text-center mt-8 text-red-500'>{error}</div>;
 
   return (
-    <table className='w-full border-collapse mb-8 text-gray-800'>
-      <thead>
-        <tr className='bg-purple-300'>
-          <th className='border p-2 text-left'>Intent Hash</th>
-          <th className='border p-2 text-left'>Input Token</th>
-          <th className='border p-2 text-left'>Output Token</th>
-          <th className='border p-2 text-left'>Exclusive Filler</th>
-          <th className='border p-2 text-left'>Decay Time</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className='w-[100px]'>Intent Hash</TableHead>
+          <TableHead>Input Token</TableHead>
+          <TableHead>Output Token</TableHead>
+          <TableHead>Decay Time</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {intents.map((intent) => (
-          <tr key={intent.hash()} className='bg-purple-50 hover:bg-purple-100'>
-            <td className='border p-2'>{shortenAddress(intent.hash())}</td>
-            <td className='border p-2'>
+          <TableRow key={intent.hash()}>
+            <TableCell>{shortenAddress(intent.hash())}</TableCell>
+            <TableCell>
               {`${intent.info.input.startAmount.toString()} `}
               <EtherscanLink
                 name={ERC20[chainId][intent.info.input.token].name || shortenAddress(intent.info.input.token)}
                 address={intent.info.input.token}
                 category='address'
               />
-            </td>
-            <td className='border p-2'>
+            </TableCell>
+            <TableCell>
               {`${intent.info.outputs[0].startAmount.toString()} -> ${intent.info.outputs[0].endAmount.toString()} `}
               <EtherscanLink
                 name={ERC20[chainId][intent.info.outputs[0].token].name || shortenAddress(intent.info.outputs[0].token)}
                 address={intent.info.outputs[0].token}
                 category='address'
               />
-            </td>
-            <td className='border p-2'>
-              <EtherscanLink
-                name={shortenAddress(intent.info.exclusiveFiller)}
-                address={intent.info.exclusiveFiller}
-                category='address'
-              />
-            </td>
-            <td className='border p-2'>
-              {formatTimestamp(numToDate(intent.info.decayStartTime)) +
-                // ' - ' +
-                // formatTimestamp(numToDate(intent.info.decayEndTime)) +
-                ` (${intent.info.decayEndTime - intent.info.decayStartTime}s)`}
-            </td>
-          </tr>
+            </TableCell>
+            <TableCell>{formatTimestamp(numToDate(intent.info.decayStartTime))}</TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }
