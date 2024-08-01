@@ -15,9 +15,9 @@ import { RawIntent } from '@/types/raw-intent';
 import { EtherscanLink } from './etherscan-link';
 
 type FetchOrdersParams = {
-  orderStatus: IntentStatus;
   chainId: 1;
   limit?: number;
+  orderStatus?: IntentStatus;
   sortKey?: 'createdAt';
   desc?: boolean;
   sort?: string;
@@ -43,14 +43,12 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
     const fetchIntents_ = async () => {
       try {
         const decodedIntents = await fetchIntents({
-          orderStatus: props.status,
           chainId,
-          limit: 5,
+          // limit: 100,
+          orderStatus: props.status,
           sortKey: 'createdAt',
           desc: true,
-          sort: 'sort=lt(9000000000)',
-          // cursor:
-          //   'eyJjaGFpbklkIjoxLCJjcmVhdGVkQXQiOjE3MjIzODI3NDUsIm9yZGVySGFzaCI6IjB4ZTRlYTVlODhlNzA1MmE5ZWJhNmQxZGY1MDczMWYwNTNkY2U0YWU0NTlmZmRiMjkzMGYzN2Y5YTZlYmM1MjBjZiJ9',
+          sort: 'lt(9000000000)',
         });
         setIntents(decodedIntents);
         setLoading(false);
@@ -73,10 +71,10 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
     <Table>
       <TableHeader className='bg-gray-100'>
         <TableRow>
-          <TableHead className='w-[150px]'>Intent Hash</TableHead>
-          <TableHead className='w-[200px]'>Input Token</TableHead>
-          <TableHead className='w-[400px]'>Output Token</TableHead>
-          <TableHead className='w-[200px]'>Decay Time</TableHead>
+          <TableHead className='w-[100px]'>Intent Hash</TableHead>
+          <TableHead className='w-[100px]'>Input Token</TableHead>
+          <TableHead className='w-[150px]'>Output Token</TableHead>
+          <TableHead className='w-[100px]'>Decay Time</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

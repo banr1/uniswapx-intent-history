@@ -9,7 +9,7 @@ import { formatTimestamp } from '@/lib/utils';
 
 export default function Home() {
   const [updatedAt, setUpdatedAt] = useState(new Date());
-  const interval = 1000;
+  const interval = 5000;
 
   setInterval(() => {
     setUpdatedAt(new Date());
