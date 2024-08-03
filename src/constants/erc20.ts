@@ -1,3 +1,5 @@
+// constants/erc20.ts
+
 import { BigNumber } from '@ethersproject/bignumber';
 
 import { Address } from '@/types/address';
@@ -53,6 +55,10 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: Bi
     },
     '0x6982508145454Ce325dDbE47a25d4ec3d2311933': {
       name: 'PEPE',
+      decimals: QUINTILLION,
+    },
+    '0xfAbA6f8e4a5E8Ab82F62fe7C39859FA577269BE3': {
+      name: 'ONDO',
       decimals: QUINTILLION,
     },
   },

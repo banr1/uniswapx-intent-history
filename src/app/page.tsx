@@ -21,7 +21,7 @@ export default function Home() {
       <div className='text-sm mb-2'>Updated at: {formatTimestamp(updatedAt)}</div>
       <h2 className='text-lg font-bold mb-2'>Open</h2>
       <IntentTable status={'open'} interval={interval} />
-      <h2 className='text-lg font-bold mb-2'>History</h2>
+      <h2 className='text-lg font-bold mb-2'>Recent History</h2>
       <IntentTable status={'filled'} interval={interval} />
       {/* <IntentTable status={'expired'} interval={interval} />
       <IntentTable status={'cancelled'} interval={interval} /> */}

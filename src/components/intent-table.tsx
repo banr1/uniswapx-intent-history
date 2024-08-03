@@ -6,13 +6,14 @@ import { useEffect, useState } from 'react';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { API_ENDPOINT } from '@/constants/api-endpoint';
-import { ERC20 } from '@/constants/erc20';
-import { formatTimestamp, numToDate, shortenAddress } from '@/lib/utils';
+import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { IntentStatus } from '@/types/intent-status';
 import { RawIntent } from '@/types/raw-intent';
 
-import { EtherscanLink } from './etherscan-link';
+import AddressCell from './address-cell';
+import InputTokenCell from './input-token-cell';
+import OutputTokenCell from './output-token-cell';
 
 type FetchOrdersParams = {
   chainId: 1;
@@ -72,6 +73,9 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
       <TableHeader className='bg-gray-100'>
         <TableRow>
           <TableHead className='w-[100px]'>Intent Hash</TableHead>
+          <TableHead className='w-[100px]'>Swapper</TableHead>
+          <TableHead className='w-[100px]'>Filler</TableHead>
+          <TableHead className='w-[100px]'>Reactor</TableHead>
           <TableHead className='w-[100px]'>Input Token</TableHead>
           <TableHead className='w-[150px]'>Output Token</TableHead>
           <TableHead className='w-[100px]'>Decay Time</TableHead>
@@ -80,23 +84,12 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
       <TableBody>
         {intents.map((intent) => (
           <TableRow key={intent.hash()}>
-            <TableCell>{shortenAddress(intent.hash())}</TableCell>
-            <TableCell>
-              {`${intent.info.input.startAmount.div(ERC20[chainId][intent.info.input.token].decimals)} `}
-              <EtherscanLink
-                name={ERC20[chainId][intent.info.input.token].name || shortenAddress(intent.info.input.token)}
-                address={intent.info.input.token}
-                category='address'
-              />
-            </TableCell>
-            <TableCell>
-              {`${intent.info.outputs[0].startAmount.div(ERC20[chainId][intent.info.outputs[0].token].decimals)} -> ${intent.info.outputs[0].endAmount.div(ERC20[chainId][intent.info.outputs[0].token].decimals)} `}
-              <EtherscanLink
-                name={ERC20[chainId][intent.info.outputs[0].token].name || shortenAddress(intent.info.outputs[0].token)}
-                address={intent.info.outputs[0].token}
-                category='address'
-              />
-            </TableCell>
+            <AddressCell address={intent.hash()} category='none' />
+            <AddressCell address={intent.info.swapper} category='address' />
+            <AddressCell address={intent.info.exclusiveFiller} category='address' />
+            <AddressCell address={intent.info.reactor} category='address' />
+            <InputTokenCell input={intent.info.input} />
+            <OutputTokenCell output={intent.info.outputs[0]} />
             <TableCell>
               {formatTimestamp(numToDate(intent.info.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.info.decayEndTime - intent.info.decayStartTime}s`}</span>

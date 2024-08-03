@@ -1,4 +1,4 @@
-// types/RawIntent.ts
+// types/raw-intent.ts
 
 export interface RawIntent {
   encodedOrder: string;

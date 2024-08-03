@@ -1,3 +1,5 @@
+// constants/power-of-10.ts
+
 import { BigNumber } from '@ethersproject/bignumber';
 
 export const MILLION = BigNumber.from('1000000'); // 10^6
