@@ -2,8 +2,8 @@
 
 import { BigNumber } from '@ethersproject/bignumber';
 
-import { Address } from '@/types/address';
 import { ChainId } from '@/types/chain-id';
+import { Address } from '@/types/hash';
 
 import { MILLION, ONE_HUNDRED_MILLION, QUINTILLION } from './power-of-10';
 
