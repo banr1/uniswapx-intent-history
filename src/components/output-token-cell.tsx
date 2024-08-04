@@ -5,10 +5,11 @@ import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
+import { shortenAddress } from '@/lib/utils';
 
 const OutputTokenCell = (props: { output: DutchOutput }) => {
   if (ERC20[1][props.output.token] === undefined) {
-    return <TableCell>{props.output.token}</TableCell>;
+    return <TableCell>{shortenAddress(props.output.token)}</TableCell>;
   }
 
   const decimals = ERC20[1][props.output.token].decimals;

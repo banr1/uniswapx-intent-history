@@ -16,7 +16,7 @@ const AddressCell = (props: { address: Address; category: EtherscanCategory | 'n
           {shortenAddress(props.address)}
         </EtherscanLink>
       ) : (
-        props.address
+        shortenAddress(props.address)
       )}
     </TableCell>
   );

@@ -1,6 +1,6 @@
-// components/IntentTable.tsx
+// components/filled-intent-table.tsx
 
-import { DutchOrder as DutchIntent } from '@uniswap/uniswapx-sdk';
+import { DutchOrder, OrderType } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -15,6 +15,8 @@ import AddressCell from './address-cell';
 import InputTokenCell from './input-token-cell';
 import OutputTokenCell from './output-token-cell';
 
+// The source code below is from the UniswapX service repository.
+// https://github.com/Uniswap/uniswapx-service/blob/5397efa66378e879e8b48d38c422d55942b0a949/lib/handlers/shared/get.ts#L59-L99
 type FetchOrdersParams = {
   chainId: 1;
   limit?: number;
@@ -27,15 +29,17 @@ type FetchOrdersParams = {
   swapper?: string;
   filler?: string;
   cursor?: string;
+  includeV2?: boolean;
+  orderType?: OrderType;
 };
 
-async function fetchIntents(params: FetchOrdersParams): Promise<DutchIntent[]> {
+async function fetchIntents(params: FetchOrdersParams): Promise<DutchOrder[]> {
   const response = await axios.get<{ orders: RawIntent[] }>(API_ENDPOINT, { params });
-  return response.data.orders.map((order) => DutchIntent.parse(order.encodedOrder, order.chainId));
+  return response.data.orders.map((order) => DutchOrder.parse(order.encodedOrder, order.chainId));
 }
 
-export default function IntentTable(props: { status: IntentStatus; interval: number }): JSX.Element {
-  const [intents, setIntents] = useState<DutchIntent[]>([]);
+export default function FilledIntentTable(props: { status: IntentStatus; interval: number }): JSX.Element {
+  const [intents, setIntents] = useState<DutchOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const chainId: ChainId = 1;
@@ -45,11 +49,13 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
       try {
         const decodedIntents = await fetchIntents({
           chainId,
-          // limit: 100,
+          limit: 100,
           orderStatus: props.status,
           sortKey: 'createdAt',
           desc: true,
           sort: 'lt(9000000000)',
+          orderType: OrderType.Dutch,
+          includeV2: false,
         });
         setIntents(decodedIntents);
         setLoading(false);
@@ -78,7 +84,8 @@ export default function IntentTable(props: { status: IntentStatus; interval: num
           <TableHead className='w-[100px]'>Reactor</TableHead>
           <TableHead className='w-[100px]'>Input Token</TableHead>
           <TableHead className='w-[150px]'>Output Token</TableHead>
-          <TableHead className='w-[100px]'>Decay Time</TableHead>
+          <TableHead className='w-[150px]'>Settled Amount</TableHead>
+          <TableHead className='w-[150px]'>Auction Time</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
