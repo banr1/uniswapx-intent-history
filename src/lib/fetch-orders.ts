@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { API_ENDPOINT } from '@/constants/api-endpoint';
 import { ignoreIntentHashes } from '@/constants/ignore-intent-hashes';
-import { DutchIntentV1, RawDutchIntentV1 } from '@/types/dutch-intent-v1';
+import { DutchIntentV1, FilledDutchIntentV1, OpenDutchIntentV1, RawDutchIntentV1 } from '@/types/dutch-intent-v1';
 import { FetchOrdersParams } from '@/types/fetch-orders-params';
 
 export async function fetchIntents(params: FetchOrdersParams): Promise<DutchIntentV1[]> {
@@ -28,9 +28,10 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<DutchInte
           chainId: order.chainId,
           orderStatus: 'filled',
           type: OrderType.Dutch,
-          settledAmounts: order.settledAmounts!,
+          version: 1,
+          settlements: order.settledAmounts!,
           txHash: order.txHash!,
-        };
+        } as FilledDutchIntentV1;
       } else if (order.orderStatus === 'open') {
         return {
           hash: decodedOrder.hash(),
@@ -44,7 +45,10 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<DutchInte
           chainId: order.chainId,
           orderStatus: 'open',
           type: OrderType.Dutch,
-        };
+          version: 1,
+          settlements: null,
+          txHash: null,
+        } as OpenDutchIntentV1;
       } else {
         throw new Error('Invalid order status');
       }

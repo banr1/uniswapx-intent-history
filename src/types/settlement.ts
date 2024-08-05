@@ -1,8 +1,8 @@
-// type/settled-amount.ts
+// type/settlement.ts
 
 import { Address } from './hash';
 
-export type SettledAmount = {
+export type Settlement = {
   tokenOut: Address;
   amountOut: number;
   amountIn: number;

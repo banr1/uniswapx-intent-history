@@ -23,6 +23,9 @@ dependencies:
   clsx:
     specifier: ^2.1.1
     version: 2.1.1
+  ethers:
+    specifier: '5.7'
+    version: 5.7.2
   lucide-react:
     specifier: ^0.417.0
     version: 0.417.0(react@18.3.1)

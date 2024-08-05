@@ -3,19 +3,18 @@
 import { OrderType } from '@uniswap/uniswapx-sdk';
 import { useEffect, useState } from 'react';
 
+import HashCell from '@/components/cell/hash-cell';
+import InputTokenCell from '@/components/cell/input-token-cell';
+import OutputTokenCell from '@/components/cell/output-token-cell';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { fetchIntents } from '@/lib/fetch-orders';
 import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
-import { DutchIntentV1 } from '@/types/dutch-intent-v1';
+import { OpenDutchIntentV1 } from '@/types/dutch-intent-v1';
 import { IntentStatus } from '@/types/intent-status';
 
-import HashCell from './hash-cell';
-import InputTokenCell from './input-token-cell';
-import OutputTokenCell from './output-token-cell';
-
 export default function OpenIntentTable(props: { status: IntentStatus; interval: number }): JSX.Element {
-  const [intents, setIntents] = useState<DutchIntentV1[]>([]);
+  const [intents, setIntents] = useState<OpenDutchIntentV1[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const chainId: ChainId = 1;
@@ -23,7 +22,7 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
   useEffect(() => {
     const fetchIntents_ = async () => {
       try {
-        const decodedIntents = await fetchIntents({
+        const intents = await fetchIntents({
           chainId,
           limit: 100,
           orderStatus: props.status,
@@ -33,7 +32,7 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
           orderType: OrderType.Dutch,
           includeV2: false,
         });
-        setIntents(decodedIntents);
+        setIntents(intents as OpenDutchIntentV1[]);
         setLoading(false);
       } catch (err) {
         setError('Error fetching orders');
@@ -51,7 +50,7 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
   if (error) return <div className='text-center mt-8 text-red-500'>{error}</div>;
 
   return (
-    <Table>
+    <Table className='mb-6'>
       <TableHeader className='bg-gray-100'>
         <TableRow>
           <TableHead className='w-[100px]'>Intent Hash</TableHead>
@@ -60,7 +59,6 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
           <TableHead className='w-[100px]'>Reactor</TableHead>
           <TableHead className='w-[100px]'>Input Token</TableHead>
           <TableHead className='w-[150px]'>Output Token</TableHead>
-          <TableHead className='w-[150px]'>Settled Amount</TableHead>
           <TableHead className='w-[150px]'>Auction Time</TableHead>
         </TableRow>
       </TableHeader>

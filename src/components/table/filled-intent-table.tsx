@@ -3,19 +3,19 @@
 import { OrderType } from '@uniswap/uniswapx-sdk';
 import { useEffect, useState } from 'react';
 
+import HashCell from '@/components/cell/hash-cell';
+import InputTokenCell from '@/components/cell/input-token-cell';
+import OutputTokenCell from '@/components/cell/output-token-cell';
+import SettledOutputTokenCell from '@/components/cell/settled-output-token-cell';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { fetchIntents } from '@/lib/fetch-orders';
 import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
-import { DutchIntentV1 } from '@/types/dutch-intent-v1';
+import { FilledDutchIntentV1 } from '@/types/dutch-intent-v1';
 import { IntentStatus } from '@/types/intent-status';
 
-import HashCell from './hash-cell';
-import InputTokenCell from './input-token-cell';
-import OutputTokenCell from './output-token-cell';
-
 export default function FilledIntentTable(props: { status: IntentStatus; interval: number }): JSX.Element {
-  const [intents, setIntents] = useState<DutchIntentV1[]>([]);
+  const [intents, setIntents] = useState<FilledDutchIntentV1[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const chainId: ChainId = 1;
@@ -23,7 +23,7 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
   useEffect(() => {
     const fetchIntents_ = async () => {
       try {
-        const decodedIntents = await fetchIntents({
+        const intents = await fetchIntents({
           chainId,
           limit: 100,
           orderStatus: props.status,
@@ -33,7 +33,7 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
           orderType: OrderType.Dutch,
           includeV2: false,
         });
-        setIntents(decodedIntents);
+        setIntents(intents as FilledDutchIntentV1[]);
         setLoading(false);
       } catch (err) {
         setError('Error fetching orders');
@@ -54,29 +54,32 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
     <Table>
       <TableHeader className='bg-gray-100'>
         <TableRow>
-          <TableHead className='w-[100px]'>Intent Hash</TableHead>
-          <TableHead className='w-[100px]'>Swapper</TableHead>
-          <TableHead className='w-[100px]'>Filler</TableHead>
-          <TableHead className='w-[100px]'>Reactor</TableHead>
-          <TableHead className='w-[100px]'>Input Token</TableHead>
-          <TableHead className='w-[150px]'>Output Token</TableHead>
-          <TableHead className='w-[150px]'>Settled Amount</TableHead>
-          <TableHead className='w-[150px]'>Auction Time</TableHead>
+          <TableHead>Tx Hash</TableHead>
+          <TableHead>Swapper</TableHead>
+          <TableHead>Filler</TableHead>
+          <TableHead>Reactor</TableHead>
+          <TableHead>Input Token</TableHead>
+          <TableHead>Output Token</TableHead>
+          <TableHead>Settled Amount</TableHead>
+          <TableHead>Auction Time</TableHead>
+          <TableHead>Ver</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {intents.map((intent) => (
           <TableRow key={intent.hash}>
-            <HashCell value={intent.hash} category='none' />
+            <HashCell value={intent.txHash} category='tx' />
             <HashCell value={intent.swapper} category='address' />
             <HashCell value={intent.filler} category='address' />
             <HashCell value={intent.reactor} category='address' />
             <InputTokenCell input={intent.input} />
             <OutputTokenCell output={intent.outputs[0]} />
+            <SettledOutputTokenCell settlement={intent.settlements[0]} />
             <TableCell>
               {formatTimestamp(numToDate(intent.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.decayEndTime - intent.decayStartTime}s`}</span>
             </TableCell>
+            <TableCell>{intent.version}</TableCell>
           </TableRow>
         ))}
       </TableBody>

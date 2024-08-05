@@ -2,8 +2,8 @@
 
 'use client';
 
-import FilledIntentTable from '@/components/filled-intent-table';
-import OpenIntentTable from '@/components/open-intent-table';
+import FilledIntentTable from '@/components/table/filled-intent-table';
+import OpenIntentTable from '@/components/table/open-intent-table';
 
 export default function Home() {
   return (
