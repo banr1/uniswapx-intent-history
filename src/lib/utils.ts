@@ -1,9 +1,8 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { type ClassValue, clsx } from 'clsx';
+import { BigNumber, ethers } from 'ethers';
 import { twMerge } from 'tailwind-merge';
 
-import { ERC20 } from '@/constants/erc20';
-import { Address, ShortAddress } from '@/types/address';
+import { Hash, ShortHash } from '@/types/hash';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -24,8 +23,25 @@ export const formatTimestamp = (date: Date): string => {
   });
 };
 
-export const shortenAddress = (address: Address): ShortAddress => `${address.slice(0, 6)} ... ${address.slice(-4)}`;
+export const shortenHash = (hash: Hash): ShortHash => `${hash.slice(0, 6)}...${hash.slice(-4)}`;
 
-export const formatTokenAmount = (amount: BigNumber, address: Address): number => {
-  return ERC20[1][address] ? amount.div(ERC20[1][address].decimals).toNumber() : 0;
+export const formatTokenAmount = (amount: BigNumber | number, decimals: number): string => {
+  let amountStr = ethers.utils.formatUnits(amount, decimals);
+  // Floor to 4 decimal places
+  const decimalIndex = amountStr.indexOf('.');
+  if (decimalIndex !== -1) {
+    amountStr = amountStr.slice(0, decimalIndex + 5);
+  }
+  // Remove trailing zeros
+  if (decimalIndex !== -1) {
+    let i = amountStr.length - 1;
+    while (amountStr[i] === '0') {
+      i -= 1;
+    }
+    amountStr = amountStr.slice(0, i + 1);
+  }
+  if (amountStr[amountStr.length - 1] === '.') {
+    amountStr = amountStr.slice(0, -1);
+  }
+  return amountStr;
 };

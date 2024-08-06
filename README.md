@@ -12,6 +12,8 @@ pnpm dev
 - Axios
 - UniswapX SDK
 - Vercel
+- Prisma
+- Supabase (PostgreSQL)
 - ESLint
 - Prettier
 
