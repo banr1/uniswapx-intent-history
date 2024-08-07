@@ -73,29 +73,29 @@ const decodeOrderV1 = (order: RawDutchIntentV1, chainId: ChainId): DutchIntentV1
 };
 
 const decodeOrderV2 = (order: RawDutchIntentV2, chainId: ChainId): DutchIntentV2 => {
-  if (['open', 'filled'].includes(order.orderStatus)) {
+  if (!['open', 'filled'].includes(order.orderStatus)) {
     throw new Error('Invalid order status');
   }
-  let decodedOrder;
-  decodedOrder = {
+
+  // const parsedOrder = DutchOrder.parse(order.encodedOrder, chainId);
+
+  const decodedOrder = {
     hash: order.orderHash,
     input: order.input,
     outputs: order.outputs,
     decayStartTime: order.cosignerData.decayStartTime,
     decayEndTime: order.cosignerData.decayEndTime,
     swapper: order.swapper,
-    filler: order.swapper,
+    filler: order.cosignerData.exclusiveFiller,
+    reactor: order.orderStatus === 'filled' ? '0x1234567890123456789012345678901234567890' : null,
     chainId: order.chainId,
+    txHash: order.orderStatus === 'filled' ? order.txHash : null,
     orderStatus: order.orderStatus,
     type: OrderType.Dutch_V2,
     version: 2,
   };
   if (order.orderStatus === 'filled') {
-    decodedOrder = {
-      ...decodedOrder,
-      reactor: '0x1234567890123456789012345678901234567890',
-    } as FilledDutchIntentV2;
-    return decodedOrder;
+    return decodedOrder as FilledDutchIntentV2;
   } else {
     return decodedOrder as OpenDutchIntentV2;
   }

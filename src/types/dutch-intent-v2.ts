@@ -4,6 +4,7 @@ import { CosignerData, DutchInput, DutchOutput, OrderType } from '@uniswap/unisw
 
 import { ChainId } from './chain-id';
 import { Address, IntentHash, TxHash } from './hash';
+import { Settlement } from './settlement';
 
 export type DutchIntentV2 = FilledDutchIntentV2 | OpenDutchIntentV2;
 
@@ -11,12 +12,14 @@ export type FilledDutchIntentV2 = {
   hash: IntentHash;
   input: DutchInput;
   outputs: DutchOutput[];
+  settlements: Settlement[];
   decayStartTime: number;
   decayEndTime: number;
   swapper: Address;
   filler: Address;
   reactor: Address;
   chainId: ChainId;
+  txHash: TxHash;
   orderStatus: 'filled';
   type: OrderType.Dutch_V2;
   version: 2;
@@ -26,11 +29,14 @@ export type OpenDutchIntentV2 = {
   hash: IntentHash;
   input: DutchInput;
   outputs: DutchOutput[];
+  settlements: null;
   decayStartTime: number;
   decayEndTime: number;
   swapper: Address;
   filler: Address;
+  reactor: null;
   chainId: ChainId;
+  txHash: null;
   orderStatus: 'open';
   type: OrderType.Dutch_V2;
   version: 2;
