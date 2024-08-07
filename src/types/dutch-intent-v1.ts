@@ -42,6 +42,8 @@ export type OpenDutchIntentV1 = {
   txHash: null;
 };
 
+// There's a example of a raw Dutch intent in the reference directory:
+// reference/raw-dutch-intent-v1.json
 export type RawDutchIntentV1 = {
   encodedOrder: string;
   orderStatus: 'filled' | 'open';
