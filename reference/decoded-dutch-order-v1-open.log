@@ -1,0 +1,23 @@
+DutchOrder {
+  info: {
+    reactor: '0x6000da47483062A0D734Ba3dc7576Ce6A0B645C4',
+    swapper: '0x3e5E7b5565331B5B891fE4293B4bc6164687B705',
+    nonce: BigNumber { _hex: '0x00', _isBigNumber: true },
+    deadline: 1720907980,
+    additionalValidationContract: '0x0000000000000000000000000000000000000000',
+    additionalValidationData: '0x',
+    decayStartTime: 1720902480,
+    decayEndTime: 1720904980,
+    exclusiveFiller: '0x0000000000000000000000000000000000000000',
+    exclusivityOverrideBps: BigNumber { _hex: '0x00', _isBigNumber: true },
+    input: {
+      token: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+      startAmount: [BigNumber],
+      endAmount: [BigNumber]
+    },
+    outputs: [ [Object] ]
+  },
+  chainId: 1,
+  _permit2Address: undefined,
+  permit2Address: '0x000000000022d473030f116ddee9f6b43ac78ba3'
+}
