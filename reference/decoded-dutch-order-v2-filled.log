@@ -1,0 +1,18 @@
+Uncaught:
+null: overflow [ See: https://links.ethers.org/v5-errors-NUMERIC_FAULT-overflow ] (fault="overflow", operation="toNumber", value="6114841339403563116272740294368147179966", code=NUMERIC_FAULT, version=bignumber/5.7.0)
+    at Logger.makeError (/Users/banriyanahama/workspace/uniswapx-watcher/node_modules/.pnpm/@ethersproject+logger@5.7.0/node_modules/@ethersproject/logger/lib/index.js:238:21)
+    at Logger.throwError (/Users/banriyanahama/workspace/uniswapx-watcher/node_modules/.pnpm/@ethersproject+logger@5.7.0/node_modules/@ethersproject/logger/lib/index.js:247:20)
+    at throwFault (/Users/banriyanahama/workspace/uniswapx-watcher/node_modules/.pnpm/@ethersproject+bignumber@5.7.0/node_modules/@ethersproject/bignumber/lib/bignumber.js:303:19)
+    at BigNumber.toNumber (/Users/banriyanahama/workspace/uniswapx-watcher/node_modules/.pnpm/@ethersproject+bignumber@5.7.0/node_modules/@ethersproject/bignumber/lib/bignumber.js:151:13)
+    at /Users/banriyanahama/workspace/uniswapx-watcher/node_modules/.pnpm/@ethersproject+abi@5.7.0/node_modules/@ethersproject/abi/lib/coders/array.js:92:60
+    at Array.forEach (<anonymous>)
+    at unpack (/Users/banriyanahama/workspace/uniswapx-watcher/node_modules/.pnpm/@ethersproject+abi@5.7.0/node_modules/@ethersproject/abi/lib/coders/array.js:88:12)
+    at TupleCoder.decode (/Users/banriyanahama/workspace/uniswapx-watcher/node_modules/.pnpm/@ethersproject+abi@5.7.0/node_modules/@ethersproject/abi/lib/coders/tuple.js:74:60) {
+  reason: 'overflow',
+  code: 'NUMERIC_FAULT',
+  fault: 'overflow',
+  operation: 'toNumber',
+  value: '6114841339403563116272740294368147179966',
+  baseType: 'tuple',
+  type: 'tuple(tuple(address,address,uint256,uint256,address,bytes),uint256,uint256,address,uint256,tuple(address,uint256,uint256),tuple(address,uint256,uint256,address)[])'
+}
