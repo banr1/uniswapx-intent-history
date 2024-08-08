@@ -69,20 +69,22 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
     <Table className='mb-6'>
       <TableHeader className='bg-gray-100'>
         <TableRow>
-          <TableHead>Intent Hash</TableHead>
-          <TableHead>Swapper</TableHead>
-          <TableHead>Filler</TableHead>
-          <TableHead>Reactor</TableHead>
-          <TableHead>Input Token</TableHead>
-          <TableHead>Output Token</TableHead>
-          <TableHead>Auction Time</TableHead>
-          <TableHead>Ver</TableHead>
+          <TableHead className='w-6'>Intent Hash</TableHead>
+          <TableHead className='w-6'>Tx Hash</TableHead>
+          <TableHead className='w-6'>Swapper</TableHead>
+          <TableHead className='w-6'>Filler</TableHead>
+          <TableHead className='w-6'>Reactor</TableHead>
+          <TableHead className='w-1/6'>Input Token</TableHead>
+          <TableHead className='w-1/6'>Output Token</TableHead>
+          <TableHead className='w-1/6'>Auction Time</TableHead>
+          <TableHead className='w-6'>Ver</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {intents.map((intent) => (
           <TableRow key={intent.hash}>
             <HashCell value={intent.hash} category='none' />
+            <HashCell value={null} category='none' />
             <HashCell value={intent.swapper} category='address' />
             <HashCell value={intent.filler} category='address' />
             <HashCell value={intent.reactor || ''} category='address' />

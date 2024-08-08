@@ -8,8 +8,12 @@ import { HASH } from '@/constants/hash';
 import { shortenHash } from '@/lib/utils';
 import { Hash } from '@/types/hash';
 
-const HashCell = (props: { value: Hash; category: EtherscanCategory | 'none' }) => {
+const HashCell = (props: { value: Hash | null; category: EtherscanCategory | 'none' }) => {
   const { value, category } = props;
+
+  if (value === null) {
+    return <TableCell>-</TableCell>;
+  }
 
   if (HASH[1][value] !== undefined && category !== 'none') {
     return (

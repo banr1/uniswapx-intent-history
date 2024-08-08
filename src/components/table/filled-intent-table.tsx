@@ -70,17 +70,17 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
     <Table>
       <TableHeader className='bg-gray-100'>
         <TableRow>
-          <TableHead>Intent Hash</TableHead>
-          <TableHead>Tx Hash</TableHead>
-          <TableHead>Swapper</TableHead>
-          <TableHead>Filler</TableHead>
-          <TableHead>Reactor</TableHead>
-          <TableHead>Input Token</TableHead>
-          <TableHead>Output Token</TableHead>
+          <TableHead className='w-6'>Intent Hash</TableHead>
+          <TableHead className='w-6'>Tx Hash</TableHead>
+          <TableHead className='w-6'>Swapper</TableHead>
+          <TableHead className='w-6'>Filler</TableHead>
+          <TableHead className='w-6'>Reactor</TableHead>
+          <TableHead className='w-1/6'>Input Token</TableHead>
+          <TableHead className='w-1/6'>Output Token</TableHead>
           {/* <TableHead>Settled Amount</TableHead> */}
-          <TableHead>Start Time</TableHead>
-          <TableHead>Auction Time</TableHead>
-          <TableHead>Ver</TableHead>
+          {/* <TableHead>Start Time</TableHead> */}
+          <TableHead className='w-1/6'>Auction Time</TableHead>
+          <TableHead className='w-6'>Ver</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -94,7 +94,7 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
             <InputTokenCell input={intent.input} />
             <OutputTokenCell output={intent.outputs[0]} />
             {/* <SettledOutputTokenCell settlement={intent.settlements[0]} /> */}
-            <TableCell>{formatTimestamp(numToDate(intent.createdAt))}</TableCell>
+            {/* <TableCell>{formatTimestamp(numToDate(intent.createdAt))}</TableCell> */}
             <TableCell>
               {formatTimestamp(numToDate(intent.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.decayEndTime - intent.decayStartTime}s`}</span>

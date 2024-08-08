@@ -89,7 +89,7 @@ const decodeOrderV2 = (order: RawDutchIntentV2, chainId: ChainId): DutchIntentV2
     decayEndTime: order.cosignerData.decayEndTime,
     swapper: order.swapper,
     filler: order.cosignerData.exclusiveFiller,
-    reactor: order.orderStatus === 'filled' ? '0x1234567890123456789012345678901234567890' : null,
+    reactor: order.orderStatus === 'filled' ? null : null, // TODO: Add reactor to fix decoding orders
     chainId: order.chainId,
     txHash: order.orderStatus === 'filled' ? order.txHash : null,
     orderStatus: order.orderStatus,

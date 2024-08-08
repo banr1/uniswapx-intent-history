@@ -17,7 +17,7 @@ export type FilledDutchIntentV2 = {
   decayEndTime: number;
   swapper: Address;
   filler: Address;
-  reactor: Address;
+  reactor: null;
   chainId: ChainId;
   txHash: TxHash;
   orderStatus: 'filled';
