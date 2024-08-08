@@ -74,12 +74,64 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
       name: 'DYDX',
       decimals: 18,
     },
+    '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2': {
+      name: 'MKR',
+      decimals: 18,
+    },
     '0x0F5D2fB29fb7d3CFeE444a200298f468908cC942': {
       name: 'MANA',
       decimals: 18,
     },
     '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9': {
       name: 'AAVE',
+      decimals: 18,
+    },
+    '0xd1d2Eb1B1e90B638588728b4130137D262C87cae': {
+      name: 'GALA',
+      decimals: 8,
+    },
+    '0xD31a59c85aE9D8edEFeC411D448f90841571b89c': {
+      name: 'SOL',
+      decimals: 9,
+    },
+    '0xaea46A60368A7bD060eec7DF8CBa43b7EF41Ad85': {
+      name: 'FET',
+      decimals: 18,
+    },
+    '0xc221b7E65FfC80DE234bbB6667aBDd46593D34F0': {
+      name: 'CFG',
+      decimals: 18,
+    },
+    '0x64Bc2cA1Be492bE7185FAA2c8835d9b824c8a194': {
+      name: 'BIGTIME',
+      decimals: 18,
+    },
+    '0x9E32b13ce7f2E80A01932B42553652E053D6ed8e': {
+      name: 'Metis',
+      decimals: 18,
+    },
+    '0x6E2a43be0B1d33b726f0CA3b8de60b3482b8b050': {
+      name: 'ARKM',
+      decimals: 18,
+    },
+    '0x767FE9EDC9E0dF98E07454847909b5E959D7ca0E': {
+      name: 'ILV',
+      decimals: 18,
+    },
+    '0x0b38210ea11411557c13457D4dA7dC6ea731B88a': {
+      name: 'API3',
+      decimals: 18,
+    },
+    '0x5283D291DBCF85356A21bA090E6db59121208b44': {
+      name: 'BLUR',
+      decimals: 18,
+    },
+    '0xDe30da39c46104798bB5aA3fe8B9e0e1F348163F': {
+      name: 'GTC',
+      decimals: 18,
+    },
+    '0xE41d2489571d322189246DaFA5ebDe1F4699F498': {
+      name: 'ZRX',
       decimals: 18,
     },
   },

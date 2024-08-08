@@ -11,10 +11,11 @@ import { fetchIntents } from '@/lib/fetch-orders';
 import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { OpenDutchIntentV1 } from '@/types/dutch-intent-v1';
+import { OpenDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
 
 export default function OpenIntentTable(props: { status: IntentStatus; interval: number }): JSX.Element {
-  const [intents, setIntents] = useState<OpenDutchIntentV1[]>([]);
+  const [intents, setIntents] = useState<(OpenDutchIntentV1 | OpenDutchIntentV2)[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const chainId: ChainId = 1;
@@ -22,7 +23,7 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
   useEffect(() => {
     const fetchIntents_ = async () => {
       try {
-        const intents = await fetchIntents({
+        const intentsV1 = await fetchIntents({
           chainId,
           limit: 100,
           orderStatus: props.status,
@@ -32,7 +33,22 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
           orderType: OrderType.Dutch,
           includeV2: false,
         });
-        setIntents(intents as OpenDutchIntentV1[]);
+        const intentsV2 = await fetchIntents({
+          chainId,
+          limit: 100,
+          orderStatus: props.status,
+          sortKey: 'createdAt',
+          desc: true,
+          sort: 'lt(9000000000)',
+          orderType: OrderType.Dutch_V2,
+          includeV2: true,
+        });
+        setIntents(
+          [...intentsV1, ...intentsV2].sort((a, b) => b.decayStartTime - a.decayStartTime) as (
+            | OpenDutchIntentV1
+            | OpenDutchIntentV2
+          )[],
+        );
         setLoading(false);
       } catch (err) {
         setError('Error fetching orders');
@@ -53,13 +69,14 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
     <Table className='mb-6'>
       <TableHeader className='bg-gray-100'>
         <TableRow>
-          <TableHead className='w-[100px]'>Intent Hash</TableHead>
-          <TableHead className='w-[100px]'>Swapper</TableHead>
-          <TableHead className='w-[100px]'>Filler</TableHead>
-          <TableHead className='w-[100px]'>Reactor</TableHead>
-          <TableHead className='w-[100px]'>Input Token</TableHead>
-          <TableHead className='w-[150px]'>Output Token</TableHead>
-          <TableHead className='w-[150px]'>Auction Time</TableHead>
+          <TableHead>Intent Hash</TableHead>
+          <TableHead>Swapper</TableHead>
+          <TableHead>Filler</TableHead>
+          <TableHead>Reactor</TableHead>
+          <TableHead>Input Token</TableHead>
+          <TableHead>Output Token</TableHead>
+          <TableHead>Auction Time</TableHead>
+          <TableHead>Ver</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -68,13 +85,14 @@ export default function OpenIntentTable(props: { status: IntentStatus; interval:
             <HashCell value={intent.hash} category='none' />
             <HashCell value={intent.swapper} category='address' />
             <HashCell value={intent.filler} category='address' />
-            <HashCell value={intent.reactor} category='address' />
+            <HashCell value={intent.reactor || ''} category='address' />
             <InputTokenCell input={intent.input} />
             <OutputTokenCell output={intent.outputs[0]} />
             <TableCell>
               {formatTimestamp(numToDate(intent.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.decayEndTime - intent.decayStartTime}s`}</span>
             </TableCell>
+            <TableCell>v{intent.version}</TableCell>
           </TableRow>
         ))}
       </TableBody>

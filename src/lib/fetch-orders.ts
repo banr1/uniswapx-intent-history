@@ -49,6 +49,7 @@ const decodeOrderV1 = (order: RawDutchIntentV1, chainId: ChainId): DutchIntentV1
       version: 1,
       settlements: order.settledAmounts!,
       txHash: order.txHash!,
+      createdAt: order.createdAt,
     } as FilledDutchIntentV1;
   } else if (order.orderStatus === 'open') {
     return {
@@ -66,6 +67,7 @@ const decodeOrderV1 = (order: RawDutchIntentV1, chainId: ChainId): DutchIntentV1
       version: 1,
       settlements: null,
       txHash: null,
+      createdAt: order.createdAt,
     } as OpenDutchIntentV1;
   } else {
     throw new Error('Invalid order status');
@@ -93,6 +95,7 @@ const decodeOrderV2 = (order: RawDutchIntentV2, chainId: ChainId): DutchIntentV2
     orderStatus: order.orderStatus,
     type: OrderType.Dutch_V2,
     version: 2,
+    createdAt: order.createdAt,
   };
   if (order.orderStatus === 'filled') {
     return decodedOrder as FilledDutchIntentV2;

@@ -23,6 +23,7 @@ export type FilledDutchIntentV2 = {
   orderStatus: 'filled';
   type: OrderType.Dutch_V2;
   version: 2;
+  createdAt: number;
 };
 
 export type OpenDutchIntentV2 = {
@@ -40,6 +41,7 @@ export type OpenDutchIntentV2 = {
   orderStatus: 'open';
   type: OrderType.Dutch_V2;
   version: 2;
+  createdAt: number;
 };
 
 // There's a example of a raw Dutch intent in the reference directory:

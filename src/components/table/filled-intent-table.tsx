@@ -70,6 +70,7 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
     <Table>
       <TableHeader className='bg-gray-100'>
         <TableRow>
+          <TableHead>Intent Hash</TableHead>
           <TableHead>Tx Hash</TableHead>
           <TableHead>Swapper</TableHead>
           <TableHead>Filler</TableHead>
@@ -77,6 +78,7 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
           <TableHead>Input Token</TableHead>
           <TableHead>Output Token</TableHead>
           {/* <TableHead>Settled Amount</TableHead> */}
+          <TableHead>Start Time</TableHead>
           <TableHead>Auction Time</TableHead>
           <TableHead>Ver</TableHead>
         </TableRow>
@@ -84,6 +86,7 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
       <TableBody>
         {intents.map((intent) => (
           <TableRow key={intent.hash}>
+            <HashCell value={intent.hash} category='none' />
             <HashCell value={intent.txHash} category='tx' />
             <HashCell value={intent.swapper} category='address' />
             <HashCell value={intent.filler} category='address' />
@@ -91,11 +94,12 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
             <InputTokenCell input={intent.input} />
             <OutputTokenCell output={intent.outputs[0]} />
             {/* <SettledOutputTokenCell settlement={intent.settlements[0]} /> */}
+            <TableCell>{formatTimestamp(numToDate(intent.createdAt))}</TableCell>
             <TableCell>
               {formatTimestamp(numToDate(intent.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.decayEndTime - intent.decayStartTime}s`}</span>
             </TableCell>
-            <TableCell>{intent.version}</TableCell>
+            <TableCell>v{intent.version}</TableCell>
           </TableRow>
         ))}
       </TableBody>
