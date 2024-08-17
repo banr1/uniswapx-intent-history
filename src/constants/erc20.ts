@@ -134,6 +134,42 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
       name: 'ZRX',
       decimals: 18,
     },
+    '0xB8c77482e45F1F44dE1745F52C74426C631bDD52': {
+      name: 'BNB',
+      decimals: 18,
+    },
+    '0x628F76eAB0C1298F7a24d337bBbF1ef8A1Ea6A24': {
+      name: 'XRP',
+      decimals: 18,
+    },
+    '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84': {
+      name: 'stETH',
+      decimals: 18,
+    },
+    '0x582d872A1B094FC48F5DE31D3B73F2D9bE47def1': {
+      name: 'TONCOIN',
+      decimals: 9,
+    },
+    '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0': {
+      name: 'wstETH',
+      decimals: 18,
+    },
+    '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE': {
+      name: 'SHIB',
+      decimals: 18,
+    },
+    '0xC47ef9B19c3e29317a50F5fBE594EbA361dadA4A': {
+      name: 'EDLC',
+      decimals: 6,
+    },
+    '0x2AF5D2aD76741191D15Dfe7bF6aC92d4Bd912Ca3': {
+      name: 'LEO',
+      decimals: 18,
+    },
+    '0x85F17Cf997934a597031b2E18a9aB6ebD4B9f6a4': {
+      name: 'NEAR',
+      decimals: 24,
+    },
   },
   42161: {
     '0x912CE59144191C1204E64559FE8253a0e49E6548': {
@@ -178,6 +214,90 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
     },
     '0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a': {
       name: 'GMX',
+      decimals: 18,
+    },
+    '0xFa7F8980b0f1E64A2062791cc3b0871572f1F7f0': {
+      name: 'UNI',
+      decimals: 18,
+    },
+    '0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00': {
+      name: 'PEPE',
+      decimals: 18,
+    },
+    '0x9623063377AD1B27544C965cCd7342f7EA7e88C7': {
+      name: 'GRT',
+      decimals: 18,
+    },
+    '0x2416092f143378750bb29b79eD961ab195CcEea5': {
+      name: 'ezETH',
+      decimals: 18,
+    },
+    '0xE4D5c6aE46ADFAF04313081e8C0052A30b6Dd724': {
+      name: 'PYTH',
+      decimals: 6,
+    },
+    '0x13Ad51ed4F1B7e9Dc168d8a00cB3f4dDD85EfA60': {
+      name: 'LDO',
+      decimals: 18,
+    },
+    '0x35751007a407ca6FEFfE80b3cB397736D2cf4dbe': {
+      name: 'weETH',
+      decimals: 18,
+    },
+    '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F': {
+      name: 'FRAX',
+      decimals: 18,
+    },
+    '0xB0fFa8000886e57F86dd5264b9582b2Ad87b2b91': {
+      name: 'W',
+      decimals: 18,
+    },
+    '0x4D15a3A2286D883AF0AA1B3f21367843FAc63E07': {
+      name: 'TUSD',
+      decimals: 18,
+    },
+    '0x178412e79c25968a32e89b11f63B33F733770c2A': {
+      name: 'frxETH',
+      decimals: 18,
+    },
+    '0xa0b862F60edEf4452F25B4160F177db44DeB6Cf1': {
+      name: 'GNO',
+      decimals: 18,
+    },
+    '0x1A4dA80967373fd929961e976b4b53ceeC063a15': {
+      name: 'LUNC',
+      decimals: 6,
+    },
+    '0x23ee2343B892b1BB63503a4FAbc840E0e2C6810f': {
+      name: 'AXL',
+      decimals: 6,
+    },
+    '0x95aB45875cFFdba1E5f451B950bC2E42c0053f39': {
+      name: 'srfxETH',
+      decimals: 18,
+    },
+    '0x6985884C4392D348587B19cb9eAAf157F13271cd': {
+      name: 'ZRO',
+      decimals: 18,
+    },
+    '0x11cDb42B0EB46D95f990BeDD4695A6e3fA034978': {
+      name: 'CRV',
+      decimals: 18,
+    },
+    '0x289ba1701C2F088cf0faf8B3705246331cB8A839': {
+      name: 'LPT',
+      decimals: 18,
+    },
+    '0x354A6dA3fcde098F8389cad84b0182725c6C91dE': {
+      name: 'COMP',
+      decimals: 18,
+    },
+    '0x35e050d3C0eC2d29D269a8EcEa763a183bDF9A9D': {
+      name: 'USDY',
+      decimals: 18,
+    },
+    '0x6314C31A7a1652cE482cffe247E9CB7c3f4BB9aF': {
+      name: '1INCH',
       decimals: 18,
     },
   },
