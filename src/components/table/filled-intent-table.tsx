@@ -14,11 +14,16 @@ import { FilledDutchIntentV1 } from '@/types/dutch-intent-v1';
 import { FilledDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
 
-export default function FilledIntentTable(props: { status: IntentStatus; interval: number }): JSX.Element {
+export default function FilledIntentTable(props: {
+  status: IntentStatus;
+  chainId: ChainId;
+  interval: number;
+}): JSX.Element {
+  const { status, chainId, interval } = props;
+
   const [intents, setIntents] = useState<(FilledDutchIntentV1 | FilledDutchIntentV2)[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const chainId: ChainId = 1;
 
   useEffect(() => {
     const fetchIntents_ = async () => {
@@ -26,7 +31,7 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
         const intentsV1 = await fetchIntents({
           chainId,
           limit: 100,
-          orderStatus: props.status,
+          orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
           sort: 'lt(9000000000)',
@@ -36,7 +41,7 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
         const intentsV2 = await fetchIntents({
           chainId,
           limit: 100,
-          orderStatus: props.status,
+          orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
           sort: 'lt(9000000000)',
@@ -58,10 +63,10 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
     };
 
     fetchIntents_();
-    const interval = setInterval(fetchIntents_, props.interval);
+    const interval_ = setInterval(fetchIntents_, interval);
 
-    return () => clearInterval(interval);
-  }, [props.status, props.interval]);
+    return () => clearInterval(interval_);
+  }, [status, chainId, interval]);
 
   if (loading) return <div className='text-center mt-8'>Loading...</div>;
   if (error) return <div className='text-center mt-8 text-red-500'>{error}</div>;
@@ -86,13 +91,13 @@ export default function FilledIntentTable(props: { status: IntentStatus; interva
       <TableBody>
         {intents.map((intent) => (
           <TableRow key={intent.hash}>
-            <HashCell value={intent.hash} category='none' />
-            <HashCell value={intent.txHash} category='tx' />
-            <HashCell value={intent.swapper} category='address' />
-            <HashCell value={intent.filler} category='address' />
-            <HashCell value={intent.reactor} category='address' />
-            <InputTokenCell input={intent.input} />
-            <OutputTokenCell output={intent.outputs[0]} />
+            <HashCell value={intent.hash} chainId={chainId} category='none' />
+            <HashCell value={intent.txHash} chainId={chainId} category='tx' />
+            <HashCell value={intent.swapper} chainId={chainId} category='address' />
+            <HashCell value={intent.filler} chainId={chainId} category='address' />
+            <HashCell value={intent.reactor} chainId={chainId} category='address' />
+            <InputTokenCell input={intent.input} chainId={chainId} />
+            <OutputTokenCell output={intent.outputs[0]} chainId={chainId} />
             {/* <SettledOutputTokenCell settlement={intent.settlements[0]} /> */}
             {/* <TableCell>{formatTimestamp(numToDate(intent.createdAt))}</TableCell> */}
             <TableCell>

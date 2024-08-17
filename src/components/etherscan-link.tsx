@@ -1,10 +1,24 @@
+import { ChainId } from '@/types/chain-id';
+
 export type EtherscanCategory = 'address' | 'tx' | 'block' | 'token' | 'ens' | 'event' | 'search';
 
-export const EtherscanLink = (props: { value: string; category: EtherscanCategory; children: React.ReactNode }) => {
+const BASE_URLS: Record<ChainId, string> = {
+  1: 'https://etherscan.io',
+  42161: 'https://arbiscan.io',
+};
+
+export const EtherscanLink = (props: {
+  value: string;
+  chainId: ChainId;
+  category: EtherscanCategory;
+  children: React.ReactNode;
+}) => {
+  const baseUrl = BASE_URLS[props.chainId];
+
   return (
     <a
       className='hover:underline underline-offset-auto'
-      href={`https://etherscan.io/${props.category}/${props.value}`}
+      href={`${baseUrl}/${props.category}/${props.value}`}
       target='_blank'
     >
       {props.children}

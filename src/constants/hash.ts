@@ -12,4 +12,5 @@ export const HASH: Record<ChainId, Record<Address, { name: string }>> = {
       name: 'Dutch Order Reactor', // V2
     },
   },
+  42161: {},
 };

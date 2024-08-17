@@ -135,4 +135,50 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
       decimals: 18,
     },
   },
+  42161: {
+    '0x912CE59144191C1204E64559FE8253a0e49E6548': {
+      name: 'ARB',
+      decimals: 18,
+    },
+    '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1': {
+      name: 'WETH',
+      decimals: 18,
+    },
+    '0xaf88d065e77c8cC2239327C5EDb3A432268e5831': {
+      name: 'USDC',
+      decimals: 6,
+    },
+    '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9': {
+      name: 'USDT',
+      decimals: 6,
+    },
+    '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1': {
+      name: 'DAI',
+      decimals: 18,
+    },
+    '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f': {
+      name: 'WBTC',
+      decimals: 18,
+    },
+    '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4': {
+      name: 'LINK',
+      decimals: 18,
+    },
+    '0x2C650dAb03A59332e2E0C0C4A7F726913e5028C1': {
+      name: 'TAP',
+      decimals: 18,
+    },
+    '0x5979D7b546E38E414F7E9822514be443A4800529': {
+      name: 'wstETH',
+      decimals: 18,
+    },
+    '0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8': {
+      name: 'PENDLE',
+      decimals: 18,
+    },
+    '0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a': {
+      name: 'GMX',
+      decimals: 18,
+    },
+  },
 };
