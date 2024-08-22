@@ -1,7 +1,7 @@
 // lib/get-alchemy-url.ts
 
 export default function getAlchemyUrl(chainId: number): string {
-  const alchemyApiKey = process.env.ALCHEMY_API_KEY;
+  const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
   const alchemyUrl =
     chainId === 1
       ? `https://eth-mainnet.alchemyapi.io/v2/${alchemyApiKey}`

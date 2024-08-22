@@ -7,7 +7,7 @@ import HashCell from '@/components/cell/hash-cell';
 import InputTokenCell from '@/components/cell/input-token-cell';
 import OutputTokenCell from '@/components/cell/output-token-cell';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { fetchIntents } from '@/lib/fetch-orders';
+import { fetchIntents } from '@/lib/fetch-intents';
 import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledDutchIntentV1 } from '@/types/dutch-intent-v1';
@@ -30,7 +30,7 @@ export default function FilledIntentTable(props: {
       try {
         const intentsV1 = await fetchIntents({
           chainId,
-          limit: 100,
+          limit: 10,
           orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
@@ -40,7 +40,7 @@ export default function FilledIntentTable(props: {
         });
         const intentsV2 = await fetchIntents({
           chainId,
-          limit: 100,
+          limit: 10,
           orderStatus: status,
           sortKey: 'createdAt',
           desc: true,

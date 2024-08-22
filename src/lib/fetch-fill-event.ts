@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { LogDescription } from 'ethers/lib/utils';
 
 import { UNISWAP_REACTOR_ABI } from '@/constants/uniswap-reactor-abi';
-import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-address';
+import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses';
 import { ChainId } from '@/types/chain-id';
 import { TxHash } from '@/types/hash';
 

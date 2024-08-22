@@ -3,25 +3,43 @@
 import { DutchOrder, OrderType } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 
-import { API_ENDPOINT } from '@/constants/api-endpoint';
+import { UNISWAPX_API_ENDPOINT } from '@/constants/api-endpoint';
 import { ignoreIntentHashes } from '@/constants/ignore-intent-hashes';
+import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses';
 import { ChainId } from '@/types/chain-id';
 import { DutchIntentV1, FilledDutchIntentV1, OpenDutchIntentV1, RawDutchIntentV1 } from '@/types/dutch-intent-v1';
 import { DutchIntentV2, FilledDutchIntentV2, OpenDutchIntentV2, RawDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { FetchOrdersParams } from '@/types/fetch-orders-params';
 
+import fetchFillEvent from './fetch-fill-event';
+
 export async function fetchIntents(params: FetchOrdersParams): Promise<DutchIntentV1[] | DutchIntentV2[]> {
   let intents;
   if (params.orderType === OrderType.Dutch) {
-    const response = await axios.get<{ orders: RawDutchIntentV1[] }>(API_ENDPOINT, { params });
-    intents = response.data.orders
+    const res = await axios.get<{ orders: RawDutchIntentV1[] }>(UNISWAPX_API_ENDPOINT, { params });
+    intents = res.data.orders
       .map((order) => decodeOrderV1(order, params.chainId))
       .filter((order): order is DutchIntentV1 => order !== null);
   } else if (params.orderType === OrderType.Dutch_V2) {
-    const response = await axios.get<{ orders: RawDutchIntentV2[] }>(API_ENDPOINT, { params });
-    intents = response.data.orders
+    const res = await axios.get<{ orders: RawDutchIntentV2[] }>(UNISWAPX_API_ENDPOINT, { params });
+    intents = res.data.orders
       .map((order) => decodeOrderV2(order, params.chainId))
       .filter((order): order is DutchIntentV2 => order !== null);
+
+    if (params.orderStatus === 'filled') {
+      intents = await Promise.all(
+        intents.map(async (intent) => {
+          const fillEvent = await fetchFillEvent(intent.txHash!, params.chainId);
+          if (!fillEvent) {
+            throw new Error('Fill event not found');
+          }
+          return {
+            ...intent,
+            filler: fillEvent.args.filler,
+          } as FilledDutchIntentV2;
+        }),
+      );
+    }
   } else {
     throw new Error('Invalid order type');
   }
@@ -89,7 +107,7 @@ const decodeOrderV2 = (order: RawDutchIntentV2, chainId: ChainId): DutchIntentV2
     decayEndTime: order.cosignerData.decayEndTime,
     swapper: order.swapper,
     filler: order.cosignerData.exclusiveFiller,
-    reactor: order.orderStatus === 'filled' ? null : null, // TODO: Add reactor to fix decoding orders
+    reactor: UNISWAP_REACTOR_ADDRESSES[chainId],
     chainId: order.chainId,
     txHash: order.orderStatus === 'filled' ? order.txHash : null,
     orderStatus: order.orderStatus,
