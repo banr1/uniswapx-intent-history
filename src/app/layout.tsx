@@ -3,7 +3,9 @@
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
+import '@rainbow-me/rainbowkit/styles.css';
 
+import { Providers } from '@/app/providers';
 import { cn } from '@/lib/utils';
 
 const fontSans = FontSans({
@@ -13,7 +15,7 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: 'UniswapX Watcher',
-  description: 'UniswapX Watcher',
+  description: 'This is UniswapX Watcher website.',
 };
 
 export default function RootLayout({
@@ -23,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>{children}</body>
+      <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
