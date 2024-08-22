@@ -7,7 +7,7 @@ import HashCell from '@/components/cell/hash-cell';
 import InputTokenCell from '@/components/cell/input-token-cell';
 import OutputTokenCell from '@/components/cell/output-token-cell';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { fetchIntents } from '@/lib/fetch-orders';
+import { fetchIntents } from '@/lib/fetch-intents';
 import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { OpenDutchIntentV1 } from '@/types/dutch-intent-v1';
@@ -92,7 +92,7 @@ export default function OpenIntentTable(props: {
             <HashCell value={null} chainId={chainId} category='none' />
             <HashCell value={intent.swapper} chainId={chainId} category='address' />
             <HashCell value={intent.filler} chainId={chainId} category='address' />
-            <HashCell value={intent.reactor || ''} chainId={chainId} category='address' />
+            <HashCell value={intent.reactor} chainId={chainId} category='address' />
             <InputTokenCell input={intent.input} chainId={chainId} />
             <OutputTokenCell output={intent.outputs[0]} chainId={chainId} />
             <TableCell>
