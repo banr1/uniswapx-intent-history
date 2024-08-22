@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
-import { formatUnits } from 'ethers';
+import { BigNumber } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
 import { twMerge } from 'tailwind-merge';
 
 import { Hash, ShortHash } from '@/types/hash';
@@ -25,7 +26,7 @@ export const formatTimestamp = (date: Date): string => {
 
 export const shortenHash = (hash: Hash): ShortHash => `${hash.slice(0, 6)}...${hash.slice(-4)}`;
 
-export const formatTokenAmount = (amount: bigint | number, decimals: number): string => {
+export const formatTokenAmount = (amount: BigNumber | number, decimals: number): string => {
   let amountStr = formatUnits(amount, decimals);
   // Floor to 4 decimal places
   const decimalIndex = amountStr.indexOf('.');

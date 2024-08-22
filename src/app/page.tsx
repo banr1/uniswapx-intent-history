@@ -2,12 +2,10 @@
 
 'use client';
 
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
 
 import ChainSwitcher from '@/components/chain-switcher';
-import IntentOrderForm from '@/components/intent-order-form';
 import FilledIntentTable from '@/components/table/filled-intent-table';
 import OpenIntentTable from '@/components/table/open-intent-table';
 import { ChainId } from '@/types/chain-id';
@@ -23,12 +21,12 @@ export default function Home() {
   return (
     <div className='mx-2 p-4'>
       <h1 className='text-2xl font-bold mb-4'>UniswapX API Watcher 🦄</h1>
-      <div className='flex flex-row justify-end'>
+      {/* <div className='flex flex-row justify-end'>
         <ConnectButton />
-      </div>
+      </div> */}
       <ChainSwitcher chainId={chainId} onChainChange={handleChainChange} />
       <h2 className='text-lg font-bold mb-2'>Submission</h2>
-      <IntentOrderForm chainId={chainId} />
+      {/* <IntentOrderForm chainId={chainId} /> */}
       <h2 className='text-lg font-bold mb-2'>Open</h2>
       <OpenIntentTable status={'open'} chainId={chainId} interval={5000} />
       <h2 className='text-lg font-bold mb-2'>Recent History</h2>
