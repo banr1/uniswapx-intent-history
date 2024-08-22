@@ -28,19 +28,19 @@ export default function FilledIntentTable(props: {
   useEffect(() => {
     const fetchIntents_ = async () => {
       try {
-        const intentsV1 = await fetchIntents({
-          chainId,
-          limit: 10,
-          orderStatus: status,
-          sortKey: 'createdAt',
-          desc: true,
-          sort: 'lt(9000000000)',
-          orderType: OrderType.Dutch,
-          includeV2: false,
-        });
+        // const intentsV1 = await fetchIntents({
+        //   chainId,
+        //   limit: 10,
+        //   orderStatus: status,
+        //   sortKey: 'createdAt',
+        //   desc: true,
+        //   sort: 'lt(9000000000)',
+        //   orderType: OrderType.Dutch,
+        //   includeV2: false,
+        // });
         const intentsV2 = await fetchIntents({
           chainId,
-          limit: 10,
+          limit: 30,
           orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
@@ -48,12 +48,12 @@ export default function FilledIntentTable(props: {
           orderType: OrderType.Dutch_V2,
           includeV2: true,
         });
-        setIntents(
-          [...intentsV1, ...intentsV2].sort((a, b) => b.decayStartTime - a.decayStartTime) as (
-            | FilledDutchIntentV1
-            | FilledDutchIntentV2
-          )[],
-        );
+        setIntents([...intentsV2].sort((a, b) => b.decayStartTime - a.decayStartTime) as FilledDutchIntentV2[]);
+        //   [...intentsV1, ...intentsV2].sort((a, b) => b.decayStartTime - a.decayStartTime) as (
+        //     | FilledDutchIntentV1
+        //     | FilledDutchIntentV2
+        //   )[],
+        // );
         setLoading(false);
       } catch (err) {
         setError('Error fetching orders');

@@ -5,7 +5,6 @@
 import { useState } from 'react';
 
 import FilledIntentTable from '@/components/table/filled-intent-table';
-import OpenIntentTable from '@/components/table/open-intent-table';
 import { ChainId } from '@/types/chain-id';
 
 export default function Home() {
@@ -25,8 +24,8 @@ export default function Home() {
       {/* <ChainSwitcher chainId={chainId} onChainChange={handleChainChange} /> */}
       {/* <h2 className='text-lg font-bold mb-2'>Submission</h2> */}
       {/* <IntentOrderForm chainId={chainId} /> */}
-      <h2 className='text-lg font-bold mb-2'>Open</h2>
-      <OpenIntentTable status={'open'} chainId={chainId} interval={5000} />
+      {/* <h2 className='text-lg font-bold mb-2'>Open</h2>
+      <OpenIntentTable status={'open'} chainId={chainId} interval={5000} /> */}
       <h2 className='text-lg font-bold mb-2'>Recent History</h2>
       <FilledIntentTable status={'filled'} chainId={chainId} interval={5000} />
     </div>
