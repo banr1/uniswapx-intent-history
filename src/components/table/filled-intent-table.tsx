@@ -28,17 +28,7 @@ export default function FilledIntentTable(props: {
   useEffect(() => {
     const fetchIntents_ = async () => {
       try {
-        // const intentsV1 = await fetchIntents({
-        //   chainId,
-        //   limit: 10,
-        //   orderStatus: status,
-        //   sortKey: 'createdAt',
-        //   desc: true,
-        //   sort: 'lt(9000000000)',
-        //   orderType: OrderType.Dutch,
-        //   includeV2: false,
-        // });
-        const intentsV2 = await fetchIntents({
+        const intents = await fetchIntents({
           chainId,
           limit: 30,
           orderStatus: status,
@@ -48,12 +38,7 @@ export default function FilledIntentTable(props: {
           orderType: OrderType.Dutch_V2,
           includeV2: true,
         });
-        setIntents([...intentsV2].sort((a, b) => b.decayStartTime - a.decayStartTime) as FilledDutchIntentV2[]);
-        //   [...intentsV1, ...intentsV2].sort((a, b) => b.decayStartTime - a.decayStartTime) as (
-        //     | FilledDutchIntentV1
-        //     | FilledDutchIntentV2
-        //   )[],
-        // );
+        setIntents(intents.sort((a, b) => b.decayStartTime - a.decayStartTime) as FilledDutchIntentV2[]);
         setLoading(false);
       } catch (err) {
         setError('Error fetching orders');
@@ -79,10 +64,9 @@ export default function FilledIntentTable(props: {
           <TableHead className='w-6'>Tx Hash</TableHead>
           <TableHead className='w-6'>Swapper</TableHead>
           <TableHead className='w-6'>Filler</TableHead>
-          <TableHead className='w-6'>Reactor</TableHead>
           <TableHead className='w-1/6'>Input Token</TableHead>
           <TableHead className='w-1/6'>Output Token</TableHead>
-          {/* <TableHead>Settled Amount</TableHead> */}
+          {/* <TableHead className='w-1/6'>Settled Amount</TableHead> */}
           {/* <TableHead>Start Time</TableHead> */}
           <TableHead className='w-1/6'>Auction Time</TableHead>
           <TableHead className='w-6'>Ver</TableHead>
@@ -95,10 +79,9 @@ export default function FilledIntentTable(props: {
             <HashCell value={intent.txHash} chainId={chainId} category='tx' />
             <HashCell value={intent.swapper} chainId={chainId} category='address' />
             <HashCell value={intent.filler} chainId={chainId} category='address' />
-            <HashCell value={intent.reactor} chainId={chainId} category='address' />
             <InputTokenCell input={intent.input} chainId={chainId} />
             <OutputTokenCell output={intent.outputs[0]} chainId={chainId} />
-            {/* <SettledOutputTokenCell settlement={intent.settlements[0]} /> */}
+            {/* <SettledOutputTokenCell settlement={intent.settlements[0]} chainId={chainId} /> */}
             {/* <TableCell>{formatTimestamp(numToDate(intent.createdAt))}</TableCell> */}
             <TableCell>
               {formatTimestamp(numToDate(intent.decayStartTime))} {` `}
