@@ -6,11 +6,10 @@ import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses
 import { ChainId } from '@/types/chain-id';
 import { TxHash } from '@/types/hash';
 
-import getAlchemyUrl from './get-alchemy-url';
+import getProvider from './get-alchemy-url';
 
 export default async function fetchFillEvent(txHash: TxHash, chainId: ChainId): Promise<LogDescription | undefined> {
-  const alchemyUrl = getAlchemyUrl(chainId);
-  const provider = new ethers.providers.JsonRpcProvider(alchemyUrl);
+  const provider = getProvider(chainId);
   const contractAddress = UNISWAP_REACTOR_ADDRESSES[chainId];
 
   const contract = new ethers.Contract(contractAddress, UNISWAP_REACTOR_ABI, provider);

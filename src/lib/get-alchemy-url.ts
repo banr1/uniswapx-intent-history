@@ -1,6 +1,8 @@
-// lib/get-alchemy-url.ts
+// lib/get-provider.ts
 
-export default function getAlchemyUrl(chainId: number): string {
+import { ethers } from 'ethers';
+
+export default function getProvider(chainId: number): ethers.providers.JsonRpcProvider {
   const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
   const alchemyUrl =
     chainId === 1
@@ -13,5 +15,7 @@ export default function getAlchemyUrl(chainId: number): string {
     throw new Error(`Unknown chain ID: ${chainId}`);
   }
 
-  return alchemyUrl;
+  const provider = new ethers.providers.JsonRpcProvider(alchemyUrl);
+
+  return provider;
 }

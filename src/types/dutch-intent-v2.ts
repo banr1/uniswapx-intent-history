@@ -15,6 +15,7 @@ export type FilledDutchIntentV2 = {
   settlements: Settlement[];
   decayStartTime: number;
   decayEndTime: number;
+  deadline: number;
   swapper: Address;
   filler: Address;
   reactor: Address;
