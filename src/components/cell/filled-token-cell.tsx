@@ -1,4 +1,4 @@
-// components/input-token-cell.tsx
+// components/filled-token-cell.tsx
 
 import React from 'react';
 
