@@ -300,5 +300,9 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
       name: '1INCH',
       decimals: 18,
     },
+    '0xbcd4D5AC29E06e4973a1dDcd782cd035d04BC0b7': {
+      name: 'QKNTL',
+      decimals: 18,
+    },
   },
 };
