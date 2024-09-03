@@ -10,9 +10,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { fetchIntents } from '@/lib/fetch-intents';
 import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
-import { FilledDutchIntentV1 } from '@/types/dutch-intent-v1';
 import { FilledDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
+
+import FilledTokenCell from '../cell/filled-token-cell';
 
 export default function FilledIntentTable(props: {
   status: IntentStatus;
@@ -21,26 +22,16 @@ export default function FilledIntentTable(props: {
 }): JSX.Element {
   const { status, chainId, interval } = props;
 
-  const [intents, setIntents] = useState<(FilledDutchIntentV1 | FilledDutchIntentV2)[]>([]);
+  const [intents, setIntents] = useState<FilledDutchIntentV2[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchIntents_ = async () => {
       try {
-        // const intentsV1 = await fetchIntents({
-        //   chainId,
-        //   limit: 10,
-        //   orderStatus: status,
-        //   sortKey: 'createdAt',
-        //   desc: true,
-        //   sort: 'lt(9000000000)',
-        //   orderType: OrderType.Dutch,
-        //   includeV2: false,
-        // });
-        const intentsV2 = await fetchIntents({
+        const intents = await fetchIntents({
           chainId,
-          limit: 30,
+          limit: 10,
           orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
@@ -48,12 +39,7 @@ export default function FilledIntentTable(props: {
           orderType: OrderType.Dutch_V2,
           includeV2: true,
         });
-        setIntents([...intentsV2].sort((a, b) => b.decayStartTime - a.decayStartTime) as FilledDutchIntentV2[]);
-        //   [...intentsV1, ...intentsV2].sort((a, b) => b.decayStartTime - a.decayStartTime) as (
-        //     | FilledDutchIntentV1
-        //     | FilledDutchIntentV2
-        //   )[],
-        // );
+        setIntents(intents.sort((a, b) => b.decayStartTime - a.decayStartTime) as FilledDutchIntentV2[]);
         setLoading(false);
       } catch (err) {
         setError('Error fetching orders');
@@ -68,6 +54,8 @@ export default function FilledIntentTable(props: {
     return () => clearInterval(interval_);
   }, [status, chainId, interval]);
 
+  // console.log('intents[0].settlements.length: ', intents[0].settlements.length);
+
   if (loading) return <div className='text-center mt-8'>Loading...</div>;
   if (error) return <div className='text-center mt-8 text-red-500'>{error}</div>;
 
@@ -79,11 +67,10 @@ export default function FilledIntentTable(props: {
           <TableHead className='w-6'>Tx Hash</TableHead>
           <TableHead className='w-6'>Swapper</TableHead>
           <TableHead className='w-6'>Filler</TableHead>
-          <TableHead className='w-6'>Reactor</TableHead>
           <TableHead className='w-1/6'>Input Token</TableHead>
           <TableHead className='w-1/6'>Output Token</TableHead>
-          {/* <TableHead>Settled Amount</TableHead> */}
-          {/* <TableHead>Start Time</TableHead> */}
+          {/* <TableHead className='w-1/6'>Actual Input Token</TableHead> */}
+          <TableHead className='w-1/6'>Actual Output Token</TableHead>
           <TableHead className='w-1/6'>Auction Time</TableHead>
           <TableHead className='w-6'>Ver</TableHead>
         </TableRow>
@@ -95,11 +82,10 @@ export default function FilledIntentTable(props: {
             <HashCell value={intent.txHash} chainId={chainId} category='tx' />
             <HashCell value={intent.swapper} chainId={chainId} category='address' />
             <HashCell value={intent.filler} chainId={chainId} category='address' />
-            <HashCell value={intent.reactor} chainId={chainId} category='address' />
             <InputTokenCell input={intent.input} chainId={chainId} />
             <OutputTokenCell output={intent.outputs[0]} chainId={chainId} />
-            {/* <SettledOutputTokenCell settlement={intent.settlements[0]} /> */}
-            {/* <TableCell>{formatTimestamp(numToDate(intent.createdAt))}</TableCell> */}
+            {/* <FilledTokenCell token={intent.filledInput!} chainId={chainId} /> */}
+            <FilledTokenCell token={intent.filledOutput!} chainId={chainId} />
             <TableCell>
               {formatTimestamp(numToDate(intent.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.decayEndTime - intent.decayStartTime}s`}</span>

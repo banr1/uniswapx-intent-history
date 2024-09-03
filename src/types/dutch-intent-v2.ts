@@ -3,8 +3,8 @@
 import { CosignerData, DutchInput, DutchOutput, OrderType } from '@uniswap/uniswapx-sdk';
 
 import { ChainId } from './chain-id';
+import { FilledToken } from './filled-token';
 import { Address, IntentHash, TxHash } from './hash';
-import { Settlement } from './settlement';
 
 export type DutchIntentV2 = FilledDutchIntentV2 | OpenDutchIntentV2;
 
@@ -12,9 +12,11 @@ export type FilledDutchIntentV2 = {
   hash: IntentHash;
   input: DutchInput;
   outputs: DutchOutput[];
-  settlements: Settlement[];
+  filledInput: FilledToken | null;
+  filledOutput: FilledToken | null;
   decayStartTime: number;
   decayEndTime: number;
+  deadline: number;
   swapper: Address;
   filler: Address;
   reactor: Address;
