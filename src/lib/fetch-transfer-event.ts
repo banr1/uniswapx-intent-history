@@ -1,22 +1,23 @@
-// lib/fetch-fill-event.ts
+// lib/fetch-transfer-event.ts
 
 import { ethers } from 'ethers';
 import { LogDescription } from 'ethers/lib/utils';
 
-import { UNISWAP_REACTOR_ABI } from '@/constants/uniswap-reactor-abi';
-import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses';
+import { ERC20_ABI } from '@/constants/erc20-abi';
 import { ChainId } from '@/types/chain-id';
+import { Address, ContractAddress } from '@/types/hash';
 
 import getProvider from './get-provider';
 
-export default async function fetchFillEvent(
+export default async function fetchTransferEvent(
   txReceipt: ethers.providers.TransactionReceipt,
+  token: ContractAddress,
+  from: Address,
+  to: Address,
   chainId: ChainId,
 ): Promise<LogDescription | undefined> {
   const provider = getProvider(chainId);
-  const contractAddress = UNISWAP_REACTOR_ADDRESSES[chainId];
-
-  const contract = new ethers.Contract(contractAddress, UNISWAP_REACTOR_ABI, provider);
+  const contract = new ethers.Contract(token, ERC20_ABI, provider);
 
   try {
     const logs = txReceipt.logs
@@ -33,16 +34,18 @@ export default async function fetchFillEvent(
       throw new Error('No logs found');
     }
 
-    const fillEvents = logs.filter((log) => log?.name === 'Fill');
+    const transferEvents = logs.filter(
+      (log) => log && log.name === 'Transfer' && log.args.from === from && log.args.to === to,
+    );
 
     // The Fill event should be unique
-    if (fillEvents.length === 0) {
+    if (transferEvents.length === 0) {
       throw new Error('No Fill events found');
-    } else if (fillEvents.length >= 2) {
+    } else if (transferEvents.length >= 2) {
       throw new Error('Multiple Fill events found');
     }
 
-    return fillEvents[0];
+    return transferEvents[0];
   } catch (error) {
     console.error(error);
     return;

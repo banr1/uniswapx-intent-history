@@ -10,9 +10,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { fetchIntents } from '@/lib/fetch-intents';
 import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
-import { FilledDutchIntentV1 } from '@/types/dutch-intent-v1';
 import { FilledDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
+
+import FilledTokenCell from '../cell/filled-token-cell';
 
 export default function FilledIntentTable(props: {
   status: IntentStatus;
@@ -21,7 +22,7 @@ export default function FilledIntentTable(props: {
 }): JSX.Element {
   const { status, chainId, interval } = props;
 
-  const [intents, setIntents] = useState<(FilledDutchIntentV1 | FilledDutchIntentV2)[]>([]);
+  const [intents, setIntents] = useState<FilledDutchIntentV2[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,6 +54,8 @@ export default function FilledIntentTable(props: {
     return () => clearInterval(interval_);
   }, [status, chainId, interval]);
 
+  // console.log('intents[0].settlements.length: ', intents[0].settlements.length);
+
   if (loading) return <div className='text-center mt-8'>Loading...</div>;
   if (error) return <div className='text-center mt-8 text-red-500'>{error}</div>;
 
@@ -66,8 +69,8 @@ export default function FilledIntentTable(props: {
           <TableHead className='w-6'>Filler</TableHead>
           <TableHead className='w-1/6'>Input Token</TableHead>
           <TableHead className='w-1/6'>Output Token</TableHead>
-          {/* <TableHead className='w-1/6'>Settled Amount</TableHead> */}
-          {/* <TableHead>Start Time</TableHead> */}
+          {/* <TableHead className='w-1/6'>Actual Input Token</TableHead> */}
+          <TableHead className='w-1/6'>Actual Output Token</TableHead>
           <TableHead className='w-1/6'>Auction Time</TableHead>
           <TableHead className='w-6'>Ver</TableHead>
         </TableRow>
@@ -81,8 +84,8 @@ export default function FilledIntentTable(props: {
             <HashCell value={intent.filler} chainId={chainId} category='address' />
             <InputTokenCell input={intent.input} chainId={chainId} />
             <OutputTokenCell output={intent.outputs[0]} chainId={chainId} />
-            {/* <SettledOutputTokenCell settlement={intent.settlements[0]} chainId={chainId} /> */}
-            {/* <TableCell>{formatTimestamp(numToDate(intent.createdAt))}</TableCell> */}
+            {/* <FilledTokenCell token={intent.filledInput!} chainId={chainId} /> */}
+            <FilledTokenCell token={intent.filledOutput!} chainId={chainId} />
             <TableCell>
               {formatTimestamp(numToDate(intent.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.decayEndTime - intent.decayStartTime}s`}</span>

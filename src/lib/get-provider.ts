@@ -15,7 +15,21 @@ export default function getProvider(chainId: number): ethers.providers.JsonRpcPr
     throw new Error(`Unknown chain ID: ${chainId}`);
   }
 
-  const provider = new ethers.providers.JsonRpcProvider(alchemyUrl);
+  const infuraApiKey = process.env.NEXT_PUBLIC_INFURA_API_KEY;
+  const infuraUrl =
+    chainId === 1
+      ? `https://mainnet.infura.io/v3/${infuraApiKey}`
+      : chainId === 42161
+        ? `https://arbitrum-mainnet.infura.io/v3/${infuraApiKey}`
+        : undefined;
+
+  if (!infuraUrl) {
+    throw new Error(`Unknown chain ID: ${chainId}`);
+  }
+
+  const randomizedUrl = alchemyUrl;
+
+  const provider = new ethers.providers.JsonRpcProvider(randomizedUrl);
 
   return provider;
 }

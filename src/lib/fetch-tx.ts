@@ -1,8 +1,10 @@
+// lib/fetch-tx.ts
+
 import { ethers } from 'ethers';
 
 import { ChainId } from '@/types/chain-id';
 
-import getProvider from './get-alchemy-url';
+import getProvider from './get-provider';
 
 export default async function fetchTx(txHash: string, chainId: ChainId): Promise<ethers.providers.TransactionResponse> {
   const provider = getProvider(chainId);

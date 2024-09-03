@@ -9,8 +9,11 @@ import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses
 import { ChainId } from '@/types/chain-id';
 import { FilledDutchIntentV2, RawDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { FetchOrdersParams } from '@/types/fetch-orders-params';
+import { FilledToken } from '@/types/filled-token';
 
 import fetchFillEvent from './fetch-fill-event';
+import fetchTransferEvent from './fetch-transfer-event';
+import fetchTxReceipt from './fetch-tx-receipt';
 
 export async function fetchIntents(params: FetchOrdersParams): Promise<FilledDutchIntentV2[]> {
   let intents;
@@ -22,14 +25,49 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledDut
 
   intents = await Promise.all(
     intents.map(async (intent) => {
-      const fillEvent = await fetchFillEvent(intent.txHash!, params.chainId);
+      const txReceipt = await fetchTxReceipt(intent.txHash!, params.chainId);
 
+      const fillEvent = await fetchFillEvent(txReceipt, params.chainId);
       if (!fillEvent) {
         throw new Error('Fill event not found');
       }
+      const filler = fillEvent.args.filler;
+
+      const inputTokenTransfer = await fetchTransferEvent(
+        txReceipt,
+        intent.input.token,
+        intent.swapper,
+        filler,
+        params.chainId,
+      );
+      const outputTokenTransfer = await fetchTransferEvent(
+        txReceipt,
+        intent.outputs[0].token,
+        filler,
+        intent.swapper,
+        params.chainId,
+      );
+
+      if (!inputTokenTransfer || !outputTokenTransfer) {
+        throw new Error('Transfer events not found');
+      }
+
+      console.log('inputTokenTransfer: ', inputTokenTransfer);
+
+      const filledInput: FilledToken = {
+        token: intent.input.token,
+        amount: inputTokenTransfer.args.value,
+      };
+      const filledOutput: FilledToken = {
+        token: intent.outputs[0].token,
+        amount: outputTokenTransfer.args.value,
+      };
+
       return {
         ...intent,
-        filler: fillEvent.args.filler,
+        filler,
+        filledInput,
+        filledOutput,
       } as FilledDutchIntentV2;
     }),
   );
@@ -48,7 +86,8 @@ const decodeOrderV2 = (order: RawDutchIntentV2, chainId: ChainId): FilledDutchIn
     hash: order.orderHash,
     input: order.input,
     outputs: order.outputs,
-    settlements: [],
+    filledInput: null,
+    filledOutput: null,
     decayStartTime: order.cosignerData.decayStartTime,
     decayEndTime: order.cosignerData.decayEndTime,
     deadline: parsedOrder.info.deadline,
