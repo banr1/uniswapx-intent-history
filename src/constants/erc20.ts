@@ -172,6 +172,10 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
     },
   },
   42161: {
+    '0x0000000000000000000000000000000000000000': {
+      name: 'ETH',
+      decimals: 18,
+    },
     '0x912CE59144191C1204E64559FE8253a0e49E6548': {
       name: 'ARB',
       decimals: 18,

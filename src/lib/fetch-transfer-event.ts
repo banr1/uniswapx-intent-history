@@ -40,9 +40,9 @@ export default async function fetchTransferEvent(
 
     // The Fill event should be unique
     if (transferEvents.length === 0) {
-      throw new Error('No Fill events found');
+      throw new Error('No Transfer events found');
     } else if (transferEvents.length >= 2) {
-      throw new Error('Multiple Fill events found');
+      throw new Error('Multiple Transfer events found');
     }
 
     return transferEvents[0];

@@ -2,6 +2,7 @@
 
 import { CosignedV2DutchOrder, OrderType } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
+import { BigNumber } from 'ethers';
 
 import { UNISWAPX_API_ENDPOINT } from '@/constants/api-endpoint';
 import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses';
@@ -18,63 +19,64 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledDut
   const rawIntents = res.data.orders;
 
   const intents: FilledDutchIntentV2[] = await Promise.all(
-    rawIntents.map(async (rawIntent) => {
-      const chainId = params.chainId;
-      const reactorAddress = UNISWAP_REACTOR_ADDRESSES[chainId];
-      const swapper = rawIntent.swapper;
-      const txReceipt = await fetchTxReceipt(rawIntent.txHash!, chainId);
-      const parsedIntent = CosignedV2DutchOrder.parse(rawIntent.encodedOrder, chainId, reactorAddress);
+    rawIntents
+      .filter(
+        (rawIntent) =>
+          // Filter out intents that are not filled
+          rawIntent.outputs[0].token !== '0x0000000000000000000000000000000000000000' &&
+          rawIntent.input.token !== '0x0000000000000000000000000000000000000000',
+      )
+      .map(async (rawIntent) => {
+        const chainId = params.chainId;
+        const reactorAddress = UNISWAP_REACTOR_ADDRESSES[chainId];
+        const swapper = rawIntent.swapper;
+        const inputTokenAddress = rawIntent.input.token;
+        const outputTokenAddress = rawIntent.outputs[0].token;
+        const txReceipt = await fetchTxReceipt(rawIntent.txHash!, chainId);
+        const parsedIntent = CosignedV2DutchOrder.parse(rawIntent.encodedOrder, chainId, reactorAddress);
 
-      const fillEvent = await fetchFillEvent(txReceipt, chainId);
-      if (!fillEvent) {
-        throw new Error('Fill event not found');
-      }
-      const filler = fillEvent.args.filler;
+        const fillEvent = await fetchFillEvent(txReceipt, chainId);
+        if (!fillEvent) {
+          throw new Error('Fill event not found');
+        }
+        const filler = fillEvent.args.filler;
 
-      const inputTokenTransfer = await fetchTransferEvent(txReceipt, rawIntent.input.token, swapper, filler, chainId);
-      const outputTokenTransfer = await fetchTransferEvent(
-        txReceipt,
-        rawIntent.outputs[0].token,
-        filler,
-        swapper,
-        chainId,
-      );
+        const inputTokenTransfer = await fetchTransferEvent(txReceipt, inputTokenAddress, swapper, filler, chainId);
+        const outputTokenTransfer = await fetchTransferEvent(txReceipt, outputTokenAddress, filler, swapper, chainId);
 
-      if (!inputTokenTransfer || !outputTokenTransfer) {
-        throw new Error('Transfer events not found');
-      }
+        if (!inputTokenTransfer || !outputTokenTransfer) {
+          throw new Error('Transfer events not found');
+        }
 
-      console.log('inputTokenTransfer: ', inputTokenTransfer);
+        const filledInput: FilledToken = {
+          token: inputTokenAddress,
+          amount: inputTokenTransfer?.args.value || BigNumber.from(0),
+        };
+        const filledOutput: FilledToken = {
+          token: outputTokenAddress,
+          amount: outputTokenTransfer?.args.value || BigNumber.from(0),
+        };
 
-      const filledInput: FilledToken = {
-        token: rawIntent.input.token,
-        amount: inputTokenTransfer.args.value,
-      };
-      const filledOutput: FilledToken = {
-        token: rawIntent.outputs[0].token,
-        amount: outputTokenTransfer.args.value,
-      };
-
-      return {
-        hash: rawIntent.orderHash,
-        input: rawIntent.input,
-        outputs: rawIntent.outputs,
-        filledInput,
-        filledOutput,
-        decayStartTime: rawIntent.cosignerData.decayStartTime,
-        decayEndTime: rawIntent.cosignerData.decayEndTime,
-        deadline: parsedIntent.info.deadline,
-        swapper,
-        filler,
-        reactor: reactorAddress,
-        chainId,
-        txHash: rawIntent.txHash!,
-        orderStatus: 'filled',
-        type: OrderType.Dutch_V2,
-        version: 2,
-        createdAt: rawIntent.createdAt,
-      };
-    }),
+        return {
+          hash: rawIntent.orderHash,
+          input: rawIntent.input,
+          outputs: rawIntent.outputs,
+          filledInput,
+          filledOutput,
+          decayStartTime: rawIntent.cosignerData.decayStartTime,
+          decayEndTime: rawIntent.cosignerData.decayEndTime,
+          deadline: parsedIntent.info.deadline,
+          swapper,
+          filler,
+          reactor: reactorAddress,
+          chainId,
+          txHash: rawIntent.txHash!,
+          orderStatus: 'filled',
+          type: OrderType.Dutch_V2,
+          version: 2,
+          createdAt: rawIntent.createdAt,
+        };
+      }),
   );
 
   return intents;

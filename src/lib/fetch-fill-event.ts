@@ -19,7 +19,7 @@ export default async function fetchFillEvent(
   const contract = new ethers.Contract(contractAddress, UNISWAP_REACTOR_ABI, provider);
 
   try {
-    const logs = txReceipt.logs
+    const fillEvents = txReceipt.logs
       .map((log) => {
         try {
           return contract.interface.parseLog(log);
@@ -27,13 +27,8 @@ export default async function fetchFillEvent(
           return null;
         }
       })
-      .filter((log) => log !== null);
-
-    if (logs.length === 0) {
-      throw new Error('No logs found');
-    }
-
-    const fillEvents = logs.filter((log) => log?.name === 'Fill');
+      .filter((log) => log !== null)
+      .filter((log) => log.name === 'Fill');
 
     // The Fill event should be unique
     if (fillEvents.length === 0) {
