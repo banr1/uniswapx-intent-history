@@ -17,6 +17,7 @@ export type FilledDutchIntentV2 = {
   decayStartTime: number;
   decayEndTime: number;
   deadline: number;
+  executedTime: number;
   swapper: Address;
   filler: Address;
   reactor: Address;

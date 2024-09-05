@@ -10,6 +10,7 @@ import { FilledDutchIntentV2, RawDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { FetchOrdersParams } from '@/types/fetch-orders-params';
 import { FilledToken } from '@/types/filled-token';
 
+import fetchBlockTimestamp from './fetch-block-timestamp';
 import fetchFillEvent from './fetch-fill-event';
 import fetchTransferEvent from './fetch-transfer-event';
 import fetchTxReceipt from './fetch-tx-receipt';
@@ -33,6 +34,7 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledDut
         const inputTokenAddress = rawIntent.input.token;
         const outputTokenAddress = rawIntent.outputs[0].token;
         const txReceipt = await fetchTxReceipt(rawIntent.txHash!, chainId);
+        const executedTime = await fetchBlockTimestamp(txReceipt, chainId);
         const parsedIntent = CosignedV2DutchOrder.parse(rawIntent.encodedOrder, chainId, reactorAddress);
 
         const fillEvent = await fetchFillEvent(txReceipt, chainId);
@@ -66,6 +68,7 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledDut
           decayStartTime: rawIntent.cosignerData.decayStartTime,
           decayEndTime: rawIntent.cosignerData.decayEndTime,
           deadline: parsedIntent.info.deadline,
+          executedTime,
           swapper,
           filler,
           reactor: reactorAddress,

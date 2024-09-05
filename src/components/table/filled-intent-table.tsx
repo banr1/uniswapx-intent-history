@@ -72,6 +72,7 @@ export default function FilledIntentTable(props: {
           {/* <TableHead className='w-1/6'>Actual Input Token</TableHead> */}
           <TableHead className='w-1/6'>Actual Output Token</TableHead>
           <TableHead className='w-1/6'>Auction Time</TableHead>
+          <TableHead className='w-1/6'>Executed TIme</TableHead>
           <TableHead className='w-6'>Ver</TableHead>
         </TableRow>
       </TableHeader>
@@ -90,6 +91,7 @@ export default function FilledIntentTable(props: {
               {formatTimestamp(numToDate(intent.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.decayEndTime - intent.decayStartTime}s`}</span>
             </TableCell>
+            <TableCell>{formatTimestamp(numToDate(intent.executedTime))}</TableCell>
             <TableCell>v{intent.version}</TableCell>
           </TableRow>
         ))}
