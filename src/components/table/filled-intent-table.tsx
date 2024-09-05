@@ -31,7 +31,7 @@ export default function FilledIntentTable(props: {
       try {
         const intents = await fetchIntents({
           chainId,
-          limit: 10,
+          limit: 30,
           orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
