@@ -212,6 +212,10 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
       name: 'PENDLE',
       decimals: 18,
     },
+    '0xba5DdD1f9d7F570dc94a51479a000E3BCE967196': {
+      name: 'AAVE',
+      decimals: 18,
+    },
     '0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a': {
       name: 'GMX',
       decimals: 18,
