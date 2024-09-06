@@ -198,7 +198,7 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
     },
     '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f': {
       name: 'WBTC',
-      decimals: 18,
+      decimals: 8,
     },
     '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4': {
       name: 'LINK',
