@@ -312,5 +312,13 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
       name: 'QKNTL',
       decimals: 18,
     },
+    '0x41169bDBa61440e322913291f4fF9bD2793e48dB': {
+      name: 'DBR-10x',
+      decimals: 18,
+    },
+    '0x93FA0B88C0C78e45980Fa74cdd87469311b7B3E4': {
+      name: 'XBG',
+      decimals: 18,
+    },
   },
 };
