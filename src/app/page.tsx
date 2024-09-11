@@ -35,7 +35,7 @@ export default function Home() {
         </EtherscanLink>
       </p>
       <h2 className='text-lg font-bold mb-2'>Recent History</h2>
-      <FilledIntentTable status={'filled'} chainId={chainId} interval={5000} />
+      <FilledIntentTable status={'filled'} chainId={chainId} interval={60_000} />
     </div>
   );
 }
