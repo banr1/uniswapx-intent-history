@@ -170,6 +170,10 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
       name: 'NEAR',
       decimals: 24,
     },
+    '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72': {
+      name: 'ENS',
+      decimals: 18,
+    },
   },
   42161: {
     '0x0000000000000000000000000000000000000000': {
@@ -318,6 +322,10 @@ export const ERC20: Record<ChainId, Record<Address, { name: string; decimals: nu
     },
     '0x93FA0B88C0C78e45980Fa74cdd87469311b7B3E4': {
       name: 'XBG',
+      decimals: 18,
+    },
+    '0xfeA31d704DEb0975dA8e77Bf13E04239e70d7c28': {
+      name: 'ENS',
       decimals: 18,
     },
   },
