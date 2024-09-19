@@ -8,7 +8,7 @@ import { formatTokenAmount, shortenHash } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
 
-const InputTokenCell = (props: { token: FilledToken; chainId: ChainId }) => {
+const FilledTokenCell = (props: { token: FilledToken; chainId: ChainId }) => {
   const { token, chainId } = props;
   if (ERC20[chainId][token.token] === undefined) {
     return <TableCell>{shortenHash(token.token)}</TableCell>;
@@ -21,4 +21,4 @@ const InputTokenCell = (props: { token: FilledToken; chainId: ChainId }) => {
   return <TableCell>{`${amount} ${name}`}</TableCell>;
 };
 
-export default InputTokenCell;
+export default FilledTokenCell;
