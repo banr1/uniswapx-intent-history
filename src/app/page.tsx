@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div className='mx-2 p-4'>
-      <h1 className='text-2xl font-bold mb-4'>UniswapX API Watcher 🦄 (Arbitrum)</h1>
+      <h1 className='text-2xl font-bold mb-4'>UniswapX Intent History 🦄 (Arbitrum)</h1>
       <p className='text-sm mb-3'>
         Reactor contract:{' '}
         <EtherscanLink value='0x1bd1aAdc9E230626C44a139d7E70d842749351eb' chainId={chainId} category='address'>
