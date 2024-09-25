@@ -14,8 +14,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'UniswapX Watcher',
-  description: 'This is UniswapX Watcher website.',
+  title: 'UniswapX Intent History',
+  description: 'This is UniswapX Intent History website.',
 };
 
 export default function RootLayout({

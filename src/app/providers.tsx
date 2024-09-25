@@ -8,7 +8,7 @@ import { arbitrum } from 'viem/chains';
 import { WagmiProvider } from 'wagmi';
 
 export const wagmiConfig = getDefaultConfig({
-  appName: 'UniswapX Watcher',
+  appName: 'UniswapX Intent History',
   projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
   chains: [arbitrum],
   ssr: true,
