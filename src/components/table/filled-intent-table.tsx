@@ -61,17 +61,17 @@ export default function FilledIntentTable(props: {
     <Table>
       <TableHeader className='bg-gray-100'>
         <TableRow>
-          <TableHead className='w-6'>Intent Hash</TableHead>
-          <TableHead className='w-6'>Tx Hash</TableHead>
-          <TableHead className='w-6'>Swapper</TableHead>
-          <TableHead className='w-6'>Cosigner</TableHead>
-          <TableHead className='w-6'>Filler</TableHead>
-          <TableHead className='w-1/6'>Input Token</TableHead>
-          <TableHead className='w-1/6'>Output Token</TableHead>
-          <TableHead className='w-1/6'>Actual Output Token</TableHead>
-          <TableHead className='w-1/6'>Auction Time</TableHead>
-          <TableHead className='w-1/6'>Deadline</TableHead>
-          <TableHead className='w-1/6'>Executed TIme</TableHead>
+          <TableHead className='w-auto'>Intent Hash</TableHead>
+          <TableHead className='w-auto'>Tx Hash</TableHead>
+          <TableHead className='w-auto'>Swapper</TableHead>
+          <TableHead className='w-auto'>Cosigner</TableHead>
+          <TableHead className='w-auto'>Filler</TableHead>
+          <TableHead className='w-auto'>Input Token</TableHead>
+          <TableHead className='w-auto'>Output Token</TableHead>
+          <TableHead className='w-auto'>Actual Output Token</TableHead>
+          <TableHead className='w-auto'>Auction Time</TableHead>
+          <TableHead className='w-auto'>Deadline</TableHead>
+          <TableHead className='w-auto'>Executed TIme</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
