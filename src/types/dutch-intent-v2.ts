@@ -17,7 +17,6 @@ export type CosignedV2DutchOrderResultInfo = {
   filledOutput: FilledToken;
   txHash: TxHash;
   filler: Address;
-  cosigner: Address;
   createdAt: number;
   executedAt: number;
 };

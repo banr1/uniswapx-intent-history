@@ -30,7 +30,6 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledCos
         const chainId = params.chainId;
         const reactorAddress = UNISWAP_REACTOR_ADDRESSES[chainId];
         const intent = CosignedV2DutchOrder.parse(rawIntent.encodedOrder, chainId, reactorAddress);
-        const cosigner = intent.recoverCosigner();
         const txReceipt = await fetchTxReceipt(rawIntent.txHash, chainId);
         const executedAt = await fetchBlockTimestamp(txReceipt, chainId);
         const fillEvent = await fetchFillEvent(txReceipt, chainId);
@@ -58,7 +57,6 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledCos
           filledOutput,
           txHash: rawIntent.txHash,
           filler,
-          cosigner,
           createdAt: rawIntent.createdAt,
           executedAt,
         };
