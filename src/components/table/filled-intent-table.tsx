@@ -64,11 +64,13 @@ export default function FilledIntentTable(props: {
           <TableHead className='w-6'>Intent Hash</TableHead>
           <TableHead className='w-6'>Tx Hash</TableHead>
           <TableHead className='w-6'>Swapper</TableHead>
+          <TableHead className='w-6'>Cosigner</TableHead>
           <TableHead className='w-6'>Filler</TableHead>
           <TableHead className='w-1/6'>Input Token</TableHead>
           <TableHead className='w-1/6'>Output Token</TableHead>
           <TableHead className='w-1/6'>Actual Output Token</TableHead>
           <TableHead className='w-1/6'>Auction Time</TableHead>
+          <TableHead className='w-1/6'>Deadline</TableHead>
           <TableHead className='w-1/6'>Executed TIme</TableHead>
         </TableRow>
       </TableHeader>
@@ -78,6 +80,7 @@ export default function FilledIntentTable(props: {
             <HashCell value={intent.hash()} chainId={chainId} category='none' />
             <HashCell value={intent.resultInfo.txHash} chainId={chainId} category='tx' />
             <HashCell value={intent.info.swapper} chainId={chainId} category='address' />
+            <HashCell value={intent.info.cosigner} chainId={chainId} category='address' />
             <HashCell value={intent.resultInfo.filler} chainId={chainId} category='address' />
             <InputTokenCell input={intent.info.input} chainId={chainId} />
             <OutputTokenCell output={intent.info.outputs[0]} chainId={chainId} />
@@ -86,6 +89,7 @@ export default function FilledIntentTable(props: {
               {formatTimestamp(numToDate(intent.info.cosignerData.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.info.cosignerData.decayEndTime - intent.info.cosignerData.decayStartTime}s`}</span>
             </TableCell>
+            <TableCell>{formatTimestamp(numToDate(intent.info.deadline))}</TableCell>
             <TableCell>{formatTimestamp(numToDate(intent.resultInfo.executedAt))}</TableCell>
           </TableRow>
         ))}
