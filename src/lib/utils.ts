@@ -46,3 +46,8 @@ export const formatTokenAmount = (amount: BigNumber | number, decimals: number):
   }
   return amountStr;
 };
+
+export const generalizedRound = (num: number, decimalPlaces: number): number => {
+  const multiplier = 10 ** decimalPlaces;
+  return Math.round(num * multiplier) / multiplier;
+};

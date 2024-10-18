@@ -83,7 +83,7 @@ export default function FilledIntentTable(props: {
             <HashCell value={intent.info.cosigner} chainId={chainId} category='address' />
             <HashCell value={intent.resultInfo.filler} chainId={chainId} category='address' />
             <InputTokenCell input={intent.info.input} chainId={chainId} />
-            <OutputTokenCell output={intent.info.outputs[0]} chainId={chainId} />
+            <OutputTokenCell outputs={intent.info.outputs} chainId={chainId} />
             <FilledTokenCell token={intent.resultInfo.filledOutput} chainId={chainId} />
             <TableCell>
               {formatTimestamp(numToDate(intent.info.cosignerData.decayStartTime))} {` `}
