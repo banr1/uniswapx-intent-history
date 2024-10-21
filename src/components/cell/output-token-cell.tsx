@@ -1,13 +1,12 @@
 // components/OutputTokenCell.tsx
 
 import { DutchOutput } from '@uniswap/uniswapx-sdk';
-import Decimal from 'decimal.js';
 import { BigNumber } from 'ethers';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
-import { formatTokenAmount, generalizedRound, shortenHash } from '@/lib/utils';
+import { DivideAsStrings, formatTokenAmount, roundToSignificantDigits, shortenHash } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 
 const OutputTokenCell = (props: { outputs: DutchOutput[]; chainId: ChainId }) => {
@@ -18,14 +17,10 @@ const OutputTokenCell = (props: { outputs: DutchOutput[]; chainId: ChainId }) =>
   if (ERC20[chainId][firstOutput.token] === undefined) {
     return <TableCell>{shortenHash(firstOutput.token)}</TableCell>;
   }
-  const outputTokenForUniswap = outputs.find(
-    (output) => output.recipient == '0x89F30783108E2F9191Db4A44aE2A516327C99575',
-  );
+  const uniswapFeeAmount = outputs.find((output) => output.recipient == '0x89F30783108E2F9191Db4A44aE2A516327C99575');
   const fee =
-    outputTokenForUniswap !== undefined
-      ? new Decimal(outputTokenForUniswap.startAmount.toString())
-          .dividedBy(new Decimal(totalStartAmount.toString()))
-          .toNumber()
+    uniswapFeeAmount !== undefined
+      ? DivideAsStrings(uniswapFeeAmount.startAmount.toString(), totalStartAmount.toString())
       : 0;
 
   const tokenInfo = ERC20[chainId][firstOutput.token];
@@ -36,7 +31,7 @@ const OutputTokenCell = (props: { outputs: DutchOutput[]; chainId: ChainId }) =>
   return (
     <TableCell>
       {`${startAmount} -> ${endAmount} ${name}`}
-      <span className='text-xs'>{` (fee: ${generalizedRound(fee, 4) * 100}%)`}</span>
+      <span className='text-xs'>{` (fee: ${roundToSignificantDigits(fee, 2) * 100}%)`}</span>
     </TableCell>
   );
 };

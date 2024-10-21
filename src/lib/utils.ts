@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
+import Decimal from 'decimal.js';
 import { BigNumber } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { twMerge } from 'tailwind-merge';
@@ -11,8 +12,18 @@ export function cn(...inputs: ClassValue[]) {
 
 export const numToDate = (num: number): Date => new Date(num * 1000);
 
-export const formatTimestamp = (date: Date): string => {
+export const formatTimestamp = (date: Date, onlyTime: boolean = false): string => {
   if (!date) return 'N/A';
+
+  if (onlyTime) {
+    return date.toLocaleString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    });
+  }
+
   return date.toLocaleString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -25,6 +36,10 @@ export const formatTimestamp = (date: Date): string => {
 };
 
 export const shortenHash = (hash: Hash): ShortHash => `${hash.slice(0, 6)}...${hash.slice(-4)}`;
+
+export const DivideAsStrings = (numerator: string, denominator: string): number => {
+  return new Decimal(numerator).dividedBy(new Decimal(denominator)).toNumber();
+};
 
 export const formatTokenAmount = (amount: BigNumber | number, decimals: number): string => {
   let amountStr = formatUnits(amount, decimals);
@@ -47,7 +62,15 @@ export const formatTokenAmount = (amount: BigNumber | number, decimals: number):
   return amountStr;
 };
 
-export const generalizedRound = (num: number, decimalPlaces: number): number => {
-  const multiplier = 10 ** decimalPlaces;
-  return Math.round(num * multiplier) / multiplier;
+export const roundToSignificantDigits = (num: number, significantDigits: number): number => {
+  if (num === 0) {
+    return 0;
+  }
+
+  const absNum = Math.abs(num);
+  const exponent = Math.floor(Math.log10(absNum));
+  const multiplier = 10 ** (significantDigits - exponent - 1);
+
+  const roundedAbsNum = Math.round(absNum * multiplier) / multiplier;
+  return num < 0 ? -roundedAbsNum : roundedAbsNum;
 };

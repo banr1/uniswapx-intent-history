@@ -14,6 +14,7 @@ import { FilledCosignedV2DutchOrder } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
 
 import FilledTokenCell from '../cell/filled-token-cell';
+import PriceCell from '../cell/price-cell';
 
 export default function FilledIntentTable(props: {
   status: IntentStatus;
@@ -61,7 +62,7 @@ export default function FilledIntentTable(props: {
     <Table>
       <TableHeader className='bg-gray-100'>
         <TableRow>
-          <TableHead className='w-auto'>Intent Hash</TableHead>
+          {/* <TableHead className='w-auto'>Intent Hash</TableHead> */}
           <TableHead className='w-auto'>Tx Hash</TableHead>
           <TableHead className='w-auto'>Swapper</TableHead>
           <TableHead className='w-auto'>Cosigner</TableHead>
@@ -69,15 +70,15 @@ export default function FilledIntentTable(props: {
           <TableHead className='w-auto'>Input Token</TableHead>
           <TableHead className='w-auto'>Output Token</TableHead>
           <TableHead className='w-auto'>Actual Output Token</TableHead>
+          <TableHead className='w-auto'>Actual Price</TableHead>
           <TableHead className='w-auto'>Auction Time</TableHead>
-          <TableHead className='w-auto'>Deadline</TableHead>
           <TableHead className='w-auto'>Executed TIme</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {intents.map((intent) => (
           <TableRow key={intent.hash()}>
-            <HashCell value={intent.hash()} chainId={chainId} category='none' />
+            {/* <HashCell value={intent.hash()} chainId={chainId} category='none' /> */}
             <HashCell value={intent.resultInfo.txHash} chainId={chainId} category='tx' />
             <HashCell value={intent.info.swapper} chainId={chainId} category='address' />
             <HashCell value={intent.info.cosigner} chainId={chainId} category='address' />
@@ -85,11 +86,12 @@ export default function FilledIntentTable(props: {
             <InputTokenCell input={intent.info.input} chainId={chainId} />
             <OutputTokenCell outputs={intent.info.outputs} chainId={chainId} />
             <FilledTokenCell token={intent.resultInfo.filledOutput} chainId={chainId} />
+            <PriceCell input={intent.info.input} output={intent.resultInfo.filledOutput} chainId={chainId} />
             <TableCell>
               {formatTimestamp(numToDate(intent.info.cosignerData.decayStartTime))} {` `}
               <span className='text-xs'>{`${intent.info.cosignerData.decayEndTime - intent.info.cosignerData.decayStartTime}s`}</span>
+              <span className='text-xs'>{` (deadline: ${formatTimestamp(numToDate(intent.info.deadline), true)})`}</span>
             </TableCell>
-            <TableCell>{formatTimestamp(numToDate(intent.info.deadline))}</TableCell>
             <TableCell>{formatTimestamp(numToDate(intent.resultInfo.executedAt))}</TableCell>
           </TableRow>
         ))}
