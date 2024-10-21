@@ -1,6 +1,7 @@
 // components/OutputTokenCell.tsx
 
 import { DutchOutput } from '@uniswap/uniswapx-sdk';
+import Decimal from 'decimal.js';
 import { BigNumber } from 'ethers';
 import React from 'react';
 
@@ -22,7 +23,9 @@ const OutputTokenCell = (props: { outputs: DutchOutput[]; chainId: ChainId }) =>
   );
   const fee =
     outputTokenForUniswap !== undefined
-      ? outputTokenForUniswap.startAmount.toNumber() / totalStartAmount.toNumber()
+      ? new Decimal(outputTokenForUniswap.startAmount.toString())
+          .dividedBy(new Decimal(totalStartAmount.toString()))
+          .toNumber()
       : 0;
 
   const tokenInfo = ERC20[chainId][firstOutput.token];
@@ -33,7 +36,7 @@ const OutputTokenCell = (props: { outputs: DutchOutput[]; chainId: ChainId }) =>
   return (
     <TableCell>
       {`${startAmount} -> ${endAmount} ${name}`}
-      <span className='text-xs'>{` (fee: ${generalizedRound(fee, 5) * 100}%)`}</span>
+      <span className='text-xs'>{` (fee: ${generalizedRound(fee, 4) * 100}%)`}</span>
     </TableCell>
   );
 };

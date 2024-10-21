@@ -30,6 +30,7 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "decimal.js": "^10.4.3",
     "encoding": "^0.1.13",
     "ethers": "^5.7.0",
     "lucide-react": "^0.417.0",
