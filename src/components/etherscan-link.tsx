@@ -1,3 +1,4 @@
+// components/etherscan-link.tsx
 import { ChainId } from '@/types/chain-id';
 
 export type EtherscanCategory = 'address' | 'tx' | 'block' | 'token' | 'ens' | 'event' | 'search';

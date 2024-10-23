@@ -9,6 +9,8 @@ import { shortenHash } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { Hash } from '@/types/hash';
 
+import { TenderlyLink } from '../tenderly-link';
+
 const HashCell = (props: { value: Hash | null; chainId: ChainId; category: EtherscanCategory | 'none' }) => {
   const { value, chainId, category } = props;
 
@@ -22,6 +24,16 @@ const HashCell = (props: { value: Hash | null; chainId: ChainId; category: Ether
         <EtherscanLink value={value} chainId={chainId} category={category}>
           {HASH[chainId][value].name}
         </EtherscanLink>
+      </TableCell>
+    );
+  }
+
+  if (category === 'tx') {
+    return (
+      <TableCell className='text-xs'>
+        <TenderlyLink value={value} chainId={chainId} category={category}>
+          {shortenHash(value)}
+        </TenderlyLink>
       </TableCell>
     );
   }
