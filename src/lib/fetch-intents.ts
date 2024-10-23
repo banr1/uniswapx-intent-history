@@ -37,24 +37,41 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledCos
           throw new Error('Fill event not found');
         }
         const filler = fillEvent.args.filler;
-        const outputTokenAddress = intent.info.outputs[0]!.token;
-        const outputTokenTransfer = await fetchTransferEvent(
+        const inputTokenAddress = intent.info.input.token;
+        const outputTokenAddress = intent.info.outputs[0].token;
+        const inputTokenTransfer = await fetchTransferEvent(
           txReceipt,
-          outputTokenAddress,
-          filler,
+          inputTokenAddress,
           intent.info.swapper,
+          filler,
           chainId,
         );
-        if (!outputTokenTransfer) {
-          throw new Error('Transfer events not found');
+        if (!inputTokenTransfer) {
+          throw new Error('Input token transfer not found');
         }
-        const filledOutput: FilledToken = {
-          token: outputTokenAddress,
-          amount: outputTokenTransfer.args.value,
+        const outputTokenTransfers = (
+          await Promise.all(
+            intent.info.outputs.map((output) =>
+              fetchTransferEvent(txReceipt, outputTokenAddress, filler, output.recipient, chainId),
+            ),
+          )
+        ).filter((transfer) => transfer !== undefined);
+        if (outputTokenTransfers.length !== intent.info.outputs.length) {
+          throw new Error('Output token transfer not found');
+        }
+
+        const filledInput: FilledToken = {
+          token: inputTokenAddress,
+          amount: inputTokenTransfer.args.value,
         };
+        const filledOutputs: FilledToken[] = outputTokenTransfers.map((transfer) => ({
+          token: outputTokenAddress,
+          amount: transfer.args.value,
+        }));
 
         const resultInfo: CosignedV2DutchOrderResultInfo = {
-          filledOutput,
+          input: filledInput,
+          outputs: filledOutputs,
           txHash: rawIntent.txHash,
           filler,
           createdAt: rawIntent.createdAt,

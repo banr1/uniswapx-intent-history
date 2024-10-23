@@ -1,30 +1,32 @@
 // components/price-cell.tsx
 
-import { DutchInput } from '@uniswap/uniswapx-sdk';
+import { BigNumber } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
-import { DivideAsStrings, roundToSignificantDigits, shortenHash } from '@/lib/utils';
+import { DivideAsStrings, formatTokenAmount, roundToSignificantDigits, shortenHash } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
 
-const PriceCell = (props: { input: DutchInput; output: FilledToken; chainId: ChainId }) => {
-  const { input, output, chainId } = props;
+const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId: ChainId }) => {
+  const { input, outputs, chainId } = props;
+  const outToken = outputs[0].token;
   if (ERC20[chainId][input.token] === undefined) {
     return <TableCell>{shortenHash(input.token)}</TableCell>;
-  } else if (ERC20[chainId][output.token] === undefined) {
-    return <TableCell>{shortenHash(output.token)}</TableCell>;
+  } else if (ERC20[chainId][outToken] === undefined) {
+    return <TableCell>{shortenHash(outToken)}</TableCell>;
   }
 
   const inInfo = ERC20[chainId][input.token];
   const inName = inInfo.name;
-  const inAmount = formatUnits(input.startAmount, inInfo.decimals);
+  const inAmount = formatUnits(input.amount, inInfo.decimals);
 
-  const outInfo = ERC20[chainId][output.token];
+  const outInfo = ERC20[chainId][outToken];
   const outName = outInfo.name;
-  const outAmount = formatUnits(output.amount, outInfo.decimals);
+  const unformattedOutAmount = outputs.reduce((acc, output) => acc.add(output.amount), BigNumber.from(0));
+  const outAmount = formatTokenAmount(unformattedOutAmount, outInfo.decimals);
 
   // ex) in Arbitrum
   // - input token:
@@ -41,7 +43,7 @@ const PriceCell = (props: { input: DutchInput; output: FilledToken; chainId: Cha
   // - order type: Sell (token0 -> token1)
   // - order: Sell 2000 WETH/USDT
   let orderType, token0Name, token0Amount, token1Name, token1Amount;
-  if (input.token < output.token) {
+  if (input.token < outToken) {
     orderType = 'Sell';
     token0Name = inName;
     token1Name = outName;

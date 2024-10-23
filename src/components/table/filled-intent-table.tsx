@@ -70,6 +70,7 @@ export default function FilledIntentTable(props: {
           <TableHead className='w-auto'>Price</TableHead>
           <TableHead className='w-auto'>Relative Bidding Time</TableHead>
           <TableHead className='w-auto'>Fee</TableHead>
+          {/* <TableHead className='w-auto'>Liquidity Source</TableHead> */}
           <TableHead className='w-auto'>Executed Time</TableHead>
         </TableRow>
       </TableHeader>
@@ -80,19 +81,19 @@ export default function FilledIntentTable(props: {
             <HashCell value={intent.info.swapper} chainId={chainId} category='address' />
             <HashCell value={intent.info.cosigner} chainId={chainId} category='address' />
             <HashCell value={intent.resultInfo.filler} chainId={chainId} category='address' />
-            <SwapCell
-              input={intent.info.input}
-              output={intent.resultInfo.filledOutput}
-              auctionOutputs={intent.info.outputs}
-              chainId={chainId}
-            />
-            <PriceCell input={intent.info.input} output={intent.resultInfo.filledOutput} chainId={chainId} />
+            <SwapCell input={intent.resultInfo.input} outputs={intent.resultInfo.outputs} chainId={chainId} />
+            <PriceCell input={intent.resultInfo.input} outputs={intent.resultInfo.outputs} chainId={chainId} />
             <RelativeBiddingTimeCell
-              output={intent.resultInfo.filledOutput}
-              auctionOutputs={intent.info.outputs}
+              input={intent.resultInfo.input}
+              auctionInput={intent.info.input}
+              auctionInputOverride={intent.info.cosignerData.inputOverride}
+              output={intent.resultInfo.outputs[0]}
+              auctionOutput={intent.info.outputs[0]}
+              auctionOutputOverride={intent.info.cosignerData.outputOverrides[0]}
               chainId={chainId}
             />
             <FeeCell auctionOutputs={intent.info.outputs} chainId={chainId} />
+            {/* <TableCell>{intent.info.liquiditySource}</TableCell> */}
             <TableCell>{formatTimestamp(numToDate(intent.resultInfo.executedAt))}</TableCell>
           </TableRow>
         ))}

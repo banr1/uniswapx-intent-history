@@ -14,7 +14,8 @@ import { FilledToken } from './filled-token';
 import { Address, IntentHash, TxHash } from './hash';
 
 export type CosignedV2DutchOrderResultInfo = {
-  filledOutput: FilledToken;
+  input: FilledToken;
+  outputs: FilledToken[];
   txHash: TxHash;
   filler: Address;
   createdAt: number;
