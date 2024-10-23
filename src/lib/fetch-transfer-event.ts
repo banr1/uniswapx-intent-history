@@ -5,18 +5,15 @@ import { LogDescription } from 'ethers/lib/utils';
 
 import { ERC20_ABI } from '@/constants/erc20-abi';
 import { ChainId } from '@/types/chain-id';
-import { Address, ContractAddress } from '@/types/hash';
 
 import getProvider from './get-provider';
 
-export default async function fetchTransferEvent(
+export default async function fetchTransferEvents(
   txReceipt: ethers.providers.TransactionReceipt,
-  token: ContractAddress,
-  from: Address,
-  to: Address,
   chainId: ChainId,
-): Promise<LogDescription | undefined> {
+): Promise<LogDescription[]> {
   const provider = getProvider(chainId);
+  const token = '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'; // any token is fine
   const contract = new ethers.Contract(token, ERC20_ABI, provider);
 
   try {
@@ -34,20 +31,16 @@ export default async function fetchTransferEvent(
       throw new Error('No logs found');
     }
 
-    const transferEvents = logs.filter(
-      (log) => log && log.name === 'Transfer' && log.args.from === from && log.args.to === to,
-    );
+    const transferEvents = logs.filter((log) => log && log.name === 'Transfer');
 
     // The Fill event should be unique
     if (transferEvents.length === 0) {
       throw new Error('No Transfer events found');
-    } else if (transferEvents.length >= 2) {
-      throw new Error('Multiple Transfer events found');
     }
 
-    return transferEvents[0];
+    return transferEvents;
   } catch (error) {
     console.error(error);
-    return;
+    return [];
   }
 }

@@ -28,7 +28,7 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
       try {
         const intents = await fetchIntents({
           chainId,
-          limit: 10,
+          limit: 50,
           orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
@@ -77,13 +77,29 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
             <HashCell value={intent.info.swapper} chainId={chainId} category='wallet' />
             <HashCell value={intent.info.cosigner} chainId={chainId} category='wallet' />
             <HashCell value={intent.resultInfo.filler} chainId={chainId} category='wallet' />
-            <SwapCell input={intent.resultInfo.input} outputs={intent.resultInfo.outputs} chainId={chainId} />
-            <PriceCell input={intent.resultInfo.input} outputs={intent.resultInfo.outputs} chainId={chainId} />
+            <SwapCell
+              input={intent.resultInfo.input}
+              outputs={
+                intent.resultInfo.outputToPayee
+                  ? [intent.resultInfo.outputToSwapper, intent.resultInfo.outputToPayee]
+                  : [intent.resultInfo.outputToSwapper]
+              }
+              chainId={chainId}
+            />
+            <PriceCell
+              input={intent.resultInfo.input}
+              outputs={
+                intent.resultInfo.outputToPayee
+                  ? [intent.resultInfo.outputToSwapper, intent.resultInfo.outputToPayee]
+                  : [intent.resultInfo.outputToSwapper]
+              }
+              chainId={chainId}
+            />
             <BidTimingCell
               input={intent.resultInfo.input}
               auctionInput={intent.info.input}
               auctionInputOverride={intent.info.cosignerData.inputOverride}
-              output={intent.resultInfo.outputs[0]}
+              output={intent.resultInfo.outputToSwapper}
               auctionOutput={intent.info.outputs[0]}
               auctionOutputOverride={intent.info.cosignerData.outputOverrides[0]}
               chainId={chainId}

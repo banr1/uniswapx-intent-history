@@ -16,7 +16,8 @@ import { LiquiditySource } from './liquidity-source';
 
 export type CosignedV2DutchOrderResultInfo = {
   input: FilledToken;
-  outputs: FilledToken[];
+  outputToSwapper: FilledToken;
+  outputToPayee: FilledToken | null;
   txHash: TxHash;
   filler: Address;
   liquiditySources: LiquiditySource[];
