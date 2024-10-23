@@ -1,32 +1,28 @@
 // components/price-cell.tsx
 
 import { BigNumber } from 'ethers';
-import { formatUnits } from 'ethers/lib/utils';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
-import { DivideAsStrings, formatTokenAmount, roundToSignificantDigits, shortenHash } from '@/lib/utils';
+import { DivideAsStrings, formatTokenAmount, roundToSignificantDigits } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
 
 const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId: ChainId }) => {
   const { input, outputs, chainId } = props;
   const outToken = outputs[0].token;
-  if (ERC20[chainId][input.token] === undefined) {
-    return <TableCell>{shortenHash(input.token)}</TableCell>;
-  } else if (ERC20[chainId][outToken] === undefined) {
-    return <TableCell>{shortenHash(outToken)}</TableCell>;
-  }
 
-  const inInfo = ERC20[chainId][input.token];
-  const inName = inInfo.name;
-  const inAmount = formatUnits(input.amount, inInfo.decimals);
+  const inInfo = ERC20[chainId][input.token] || undefined;
+  const inName = inInfo ? inInfo.name : '???';
+  const inAmount = inInfo ? formatTokenAmount(input.amount, inInfo.decimals) : formatTokenAmount(input.amount, 18);
 
-  const outInfo = ERC20[chainId][outToken];
-  const outName = outInfo.name;
+  const outInfo = ERC20[chainId][outToken] || undefined;
+  const outName = outInfo ? outInfo.name : '???';
   const unformattedOutAmount = outputs.reduce((acc, output) => acc.add(output.amount), BigNumber.from(0));
-  const outAmount = formatTokenAmount(unformattedOutAmount, outInfo.decimals);
+  const outAmount = outInfo
+    ? formatTokenAmount(unformattedOutAmount, outInfo.decimals)
+    : formatTokenAmount(unformattedOutAmount, 18);
 
   // ex) in Arbitrum
   // - input token:
@@ -44,13 +40,13 @@ const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId:
   // - order: Sell 2000 WETH/USDT
   let orderType, token0Name, token0Amount, token1Name, token1Amount;
   if (input.token < outToken) {
-    orderType = 'Sell';
+    orderType = 'sell';
     token0Name = inName;
     token1Name = outName;
     token0Amount = inAmount;
     token1Amount = outAmount;
   } else {
-    orderType = 'Buy';
+    orderType = 'buy';
     token0Name = outName;
     token1Name = inName;
     token0Amount = outAmount;
@@ -59,7 +55,12 @@ const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId:
 
   const price = DivideAsStrings(token1Amount, token0Amount);
 
-  return <TableCell>{`${orderType} ${roundToSignificantDigits(price, 6)} ${token0Name}/${token1Name}`}</TableCell>;
+  return (
+    <TableCell>
+      {`${roundToSignificantDigits(price, 6)} ${token0Name}/${token1Name}`}
+      <span className='text-sm'>{` (${orderType})`}</span>
+    </TableCell>
+  );
 };
 
 export default PriceCell;

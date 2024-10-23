@@ -6,8 +6,7 @@ import { BigNumber } from 'ethers';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
-import { ERC20 } from '@/constants/erc20';
-import { roundToSignificantDigits, shortenHash } from '@/lib/utils';
+import { roundToSignificantDigits } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
 
@@ -23,11 +22,6 @@ const BidTimingCell = (props: {
   chainId: ChainId;
 }) => {
   const { input, auctionInput, auctionInputOverride, output, auctionOutput, auctionOutputOverride, chainId } = props;
-  if (ERC20[chainId][input.token] === undefined) {
-    return <TableCell>{shortenHash(input.token)}</TableCell>;
-  } else if (ERC20[chainId][output.token] === undefined) {
-    return <TableCell>{shortenHash(output.token)}</TableCell>;
-  }
 
   const inStartAmount = new Decimal(auctionInput.startAmount.toString());
   const inEndAmount = new Decimal(auctionInput.endAmount.toString());
