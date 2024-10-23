@@ -28,7 +28,7 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
       try {
         const intents = await fetchIntents({
           chainId,
-          limit: 50,
+          limit: 10,
           orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
@@ -66,7 +66,7 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
           <TableHead className='w-auto'>Price</TableHead>
           <TableHead className='w-auto'>Bid Timing</TableHead>
           <TableHead className='w-auto'>Fee</TableHead>
-          {/* <TableHead className='w-auto'>Liquidity Source</TableHead> */}
+          <TableHead className='w-auto'>Liquidity Source</TableHead>
           <TableHead className='w-auto'>Executed Time</TableHead>
         </TableRow>
       </TableHeader>
@@ -89,7 +89,7 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
               chainId={chainId}
             />
             <FeeCell auctionOutputs={intent.info.outputs} chainId={chainId} />
-            {/* <TableCell>{intent.info.liquiditySource}</TableCell> */}
+            <TableCell>{intent.resultInfo.liquiditySources.join(', ')}</TableCell>
             <TableCell>{formatTimestamp(numToDate(intent.resultInfo.executedAt))}</TableCell>
           </TableRow>
         ))}

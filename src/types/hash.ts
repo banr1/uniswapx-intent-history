@@ -6,3 +6,4 @@ export type IntentHash = string;
 export type Address = string;
 export type ContractAddress = Address;
 export type ShortHash = string;
+export type HashCategory = 'tx' | 'wallet' | 'contract';

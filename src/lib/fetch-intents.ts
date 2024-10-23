@@ -82,6 +82,7 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledCos
           input: filledInput,
           outputs: filledOutputs,
           txHash: rawIntent.txHash,
+          liquiditySources: ['private'],
           filler,
           createdAt: rawIntent.createdAt,
           executedAt,

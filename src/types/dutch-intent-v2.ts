@@ -12,12 +12,14 @@ import {
 import { ChainId } from './chain-id';
 import { FilledToken } from './filled-token';
 import { Address, IntentHash, TxHash } from './hash';
+import { LiquiditySource } from './liquidity-source';
 
 export type CosignedV2DutchOrderResultInfo = {
   input: FilledToken;
   outputs: FilledToken[];
   txHash: TxHash;
   filler: Address;
+  liquiditySources: LiquiditySource[];
   createdAt: number;
   executedAt: number;
 };

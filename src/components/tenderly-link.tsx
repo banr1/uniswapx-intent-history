@@ -1,7 +1,7 @@
 // components/tenderly-link.tsx
 
-import { HashCategory } from '@/constants/hash';
 import { ChainId } from '@/types/chain-id';
+import { HashCategory } from '@/types/hash';
 
 type TenderlyCategory = HashCategory;
 
