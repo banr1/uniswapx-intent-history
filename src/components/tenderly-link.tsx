@@ -21,12 +21,15 @@ export const TenderlyLink = (props: {
   const chain = CHAIN_NAME[chainId];
 
   return (
-    <a
-      className='hover:underline underline-offset-auto'
-      href={`${baseUrl}/${category}/${chain}/${value}`}
-      target='_blank'
-    >
-      {props.children}
-    </a>
+    <div className='flex items-center'>
+      <img src={'tenderly-logo.svg'} alt='Tenderly Logo' style={{ marginRight: '2px' }} width={12} height={12} />
+      <a
+        className='hover:underline underline-offset-auto'
+        href={`${baseUrl}/${category}/${chain}/${value}`}
+        target='_blank'
+      >
+        {props.children}
+      </a>
+    </div>
   );
 };

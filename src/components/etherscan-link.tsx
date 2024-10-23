@@ -14,15 +14,15 @@ export const EtherscanLink = (props: {
   category: EtherscanCategory;
   children: React.ReactNode;
 }) => {
-  const baseUrl = BASE_URLS[props.chainId];
+  const { value, category, chainId } = props;
+  const baseUrl = BASE_URLS[chainId];
 
   return (
-    <a
-      className='hover:underline underline-offset-auto'
-      href={`${baseUrl}/${props.category}/${props.value}`}
-      target='_blank'
-    >
-      {props.children}
-    </a>
+    <div className='flex items-center'>
+      <img src={'arbitrum-logo.svg'} alt='Arbiscan Logo' style={{ marginRight: '2px' }} width={12} height={12} />
+      <a className='hover:underline underline-offset-auto' href={`${baseUrl}/${category}/${value}`} target='_blank'>
+        {props.children}
+      </a>
+    </div>
   );
 };

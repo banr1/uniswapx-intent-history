@@ -19,22 +19,22 @@ export default function Home() {
   return (
     <div className='mx-2 p-4'>
       <h1 className='text-2xl font-bold mb-4'>UniswapX Intent History 🦄 (Arbitrum)</h1>
-      <p className='text-sm mb-3'>
-        Reactor contract:{' '}
+      <div className='flex items-center gap-2 text-sm mb-1'>
+        <p>Reactor contract:</p>
         <EtherscanLink value={reactorAddress} chainId={chainId} category='address'>
           {shortenHash(reactorAddress)}
         </EtherscanLink>
-      </p>
-      <p className='text-sm mb-3'>
-        Fee recipient addresses:{' '}
+      </div>
+      <div className='flex items-center gap-2 text-sm mb-3'>
+        <p>Fee recipient addresses:</p>
         <EtherscanLink value={feeAddresses[0]} chainId={chainId} category='address'>
           {shortenHash(feeAddresses[0])}
         </EtherscanLink>
-        {' , '}
+        <div>, </div>
         <EtherscanLink value={feeAddresses[1]} chainId={chainId} category='address'>
           {shortenHash(feeAddresses[1])}
         </EtherscanLink>
-      </p>
+      </div>
       <h2 className='text-lg font-bold mb-2'>Recent History</h2>
       <FilledIntentTable status={'filled'} chainId={chainId} interval={60_000} />
     </div>
