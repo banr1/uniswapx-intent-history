@@ -74,9 +74,9 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
         {intents.map((intent) => (
           <TableRow key={intent.hash()}>
             <HashCell value={intent.resultInfo.txHash} chainId={chainId} category='tx' />
-            <HashCell value={intent.info.swapper} chainId={chainId} category='address' />
-            <HashCell value={intent.info.cosigner} chainId={chainId} category='address' />
-            <HashCell value={intent.resultInfo.filler} chainId={chainId} category='address' />
+            <HashCell value={intent.info.swapper} chainId={chainId} category='wallet' />
+            <HashCell value={intent.info.cosigner} chainId={chainId} category='wallet' />
+            <HashCell value={intent.resultInfo.filler} chainId={chainId} category='wallet' />
             <SwapCell input={intent.resultInfo.input} outputs={intent.resultInfo.outputs} chainId={chainId} />
             <PriceCell input={intent.resultInfo.input} outputs={intent.resultInfo.outputs} chainId={chainId} />
             <BidTimingCell

@@ -58,7 +58,11 @@ const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId:
   return (
     <TableCell>
       {`${roundToSignificantDigits(price, 6)} ${token0Name}/${token1Name}`}
-      <span className='text-sm'>{` (${orderType})`}</span>
+      {orderType === 'buy' ? (
+        <span className='text-sm text-teal-500'> buy</span>
+      ) : (
+        <span className='text-sm text-pink-500'> sell</span>
+      )}
     </TableCell>
   );
 };

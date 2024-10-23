@@ -4,6 +4,7 @@ import { CosignedV2DutchOrder } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 
 import { UNISWAPX_API_ENDPOINT } from '@/constants/api-endpoint';
+import { UNISWAP_FEE_PAYEE_ADDRESSES } from '@/constants/uniswap-fee-payee-addresses';
 import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses';
 import { CosignedV2DutchOrderResultInfo, FilledCosignedV2DutchOrder, RawDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { FetchOrdersParams } from '@/types/fetch-orders-params';
@@ -68,6 +69,14 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledCos
           token: outputTokenAddress,
           amount: transfer.args.value,
         }));
+
+        const recipientsOtherThanFillerAndPayee = intent.info.outputs
+          .slice(1)
+          .map((output) => output.recipient)
+          .filter((recipient) => !UNISWAP_FEE_PAYEE_ADDRESSES[chainId].includes(recipient));
+        if (recipientsOtherThanFillerAndPayee.length > 0) {
+          console.warn('Recipients other than filler and payee found', recipientsOtherThanFillerAndPayee);
+        }
 
         const resultInfo: CosignedV2DutchOrderResultInfo = {
           input: filledInput,
