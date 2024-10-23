@@ -5,7 +5,7 @@
 import { useState } from 'react';
 
 import { EtherscanLink } from '@/components/etherscan-link';
-import FilledIntentTable from '@/components/table/filled-intent-table';
+import IntentTable from '@/components/table/intent-table';
 import { UNISWAP_FEE_ADDRESSES } from '@/constants/uniswap-fee-addresses';
 import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses';
 import { shortenHash } from '@/lib/utils';
@@ -35,8 +35,7 @@ export default function Home() {
           {shortenHash(feeAddresses[1])}
         </EtherscanLink>
       </div>
-      <h2 className='text-lg font-bold mb-2'>Recent History</h2>
-      <FilledIntentTable status={'filled'} chainId={chainId} interval={60_000} />
+      <IntentTable status={'filled'} chainId={chainId} interval={60_000} />
     </div>
   );
 }

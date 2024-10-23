@@ -1,4 +1,4 @@
-// components/filled-intent-table.tsx
+// components/intent-table.tsx
 
 import { OrderType } from '@uniswap/uniswapx-sdk';
 import { useEffect, useState } from 'react';
@@ -11,16 +11,12 @@ import { ChainId } from '@/types/chain-id';
 import { FilledCosignedV2DutchOrder } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
 
+import BidTimingCell from '../cell/bid-timing';
 import FeeCell from '../cell/fee-cell';
 import PriceCell from '../cell/price-cell';
-import RelativeBiddingTimeCell from '../cell/relative-bidding-time-cell';
 import SwapCell from '../cell/swap-cell';
 
-export default function FilledIntentTable(props: {
-  status: IntentStatus;
-  chainId: ChainId;
-  interval: number;
-}): JSX.Element {
+export default function IntentTable(props: { status: IntentStatus; chainId: ChainId; interval: number }): JSX.Element {
   const { status, chainId, interval } = props;
 
   const [intents, setIntents] = useState<FilledCosignedV2DutchOrder[]>([]);
@@ -68,7 +64,7 @@ export default function FilledIntentTable(props: {
           <TableHead className='w-auto'>Filler</TableHead>
           <TableHead className='w-auto'>Swap</TableHead>
           <TableHead className='w-auto'>Price</TableHead>
-          <TableHead className='w-auto'>Relative Bidding Time</TableHead>
+          <TableHead className='w-auto'>Bid Timing</TableHead>
           <TableHead className='w-auto'>Fee</TableHead>
           {/* <TableHead className='w-auto'>Liquidity Source</TableHead> */}
           <TableHead className='w-auto'>Executed Time</TableHead>
@@ -83,7 +79,7 @@ export default function FilledIntentTable(props: {
             <HashCell value={intent.resultInfo.filler} chainId={chainId} category='address' />
             <SwapCell input={intent.resultInfo.input} outputs={intent.resultInfo.outputs} chainId={chainId} />
             <PriceCell input={intent.resultInfo.input} outputs={intent.resultInfo.outputs} chainId={chainId} />
-            <RelativeBiddingTimeCell
+            <BidTimingCell
               input={intent.resultInfo.input}
               auctionInput={intent.info.input}
               auctionInputOverride={intent.info.cosignerData.inputOverride}

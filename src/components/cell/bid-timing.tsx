@@ -1,4 +1,4 @@
-// components/relative-bidding-time-cell.tsx
+// components/cell/bid-timing-cell.tsx
 
 import { DutchInput, DutchOutput } from '@uniswap/uniswapx-sdk';
 import Decimal from 'decimal.js';
@@ -13,7 +13,7 @@ import { FilledToken } from '@/types/filled-token';
 
 // Calculate the percentage of the auction that has been executed
 // We don't need to use all of the output tokens to calculate this percentage
-const RelativeBiddingTimeCell = (props: {
+const BidTimingCell = (props: {
   input: FilledToken;
   auctionInput: DutchInput;
   auctionInputOverride: BigNumber;
@@ -77,4 +77,4 @@ const RelativeBiddingTimeCell = (props: {
   return <TableCell>{`${executionPercentage}%`}</TableCell>;
 };
 
-export default RelativeBiddingTimeCell;
+export default BidTimingCell;
