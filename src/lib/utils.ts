@@ -37,40 +37,10 @@ export const formatTimestamp = (date: Date, onlyTime: boolean = false): string =
 
 export const shortenHash = (hash: Hash): ShortHash => `${hash.slice(0, 6)}...${hash.slice(-4)}`;
 
-export const DivideAsStrings = (numerator: string, denominator: string): number => {
-  return new Decimal(numerator).dividedBy(new Decimal(denominator)).toNumber();
-};
+export function bigNumberToDecimal(num: BigNumber, decimals: number): Decimal {
+  return new Decimal(formatUnits(num, decimals));
+}
 
-export const formatTokenAmount = (amount: BigNumber | number, decimals: number): string => {
-  let amountStr = formatUnits(amount, decimals);
-  // Floor to 4 decimal places
-  const decimalIndex = amountStr.indexOf('.');
-  if (decimalIndex !== -1) {
-    amountStr = amountStr.slice(0, decimalIndex + 5);
-  }
-  // Remove trailing zeros
-  if (decimalIndex !== -1) {
-    let i = amountStr.length - 1;
-    while (amountStr[i] === '0') {
-      i -= 1;
-    }
-    amountStr = amountStr.slice(0, i + 1);
-  }
-  if (amountStr[amountStr.length - 1] === '.') {
-    amountStr = amountStr.slice(0, -1);
-  }
-  return amountStr;
-};
-
-export const roundToSignificantDigits = (num: number, significantDigits: number): number => {
-  if (num === 0) {
-    return 0;
-  }
-
-  const absNum = Math.abs(num);
-  const exponent = Math.floor(Math.log10(absNum));
-  const multiplier = 10 ** (significantDigits - exponent - 1);
-
-  const roundedAbsNum = Math.round(absNum * multiplier) / multiplier;
-  return num < 0 ? -roundedAbsNum : roundedAbsNum;
-};
+export function decimalToShow(num: Decimal, significantDigits: number = 6): string {
+  return num.toSignificantDigits(significantDigits, Decimal.ROUND_HALF_UP).toString();
+}

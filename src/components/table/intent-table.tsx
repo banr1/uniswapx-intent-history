@@ -11,8 +11,7 @@ import { ChainId } from '@/types/chain-id';
 import { FilledCosignedV2DutchOrder } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
 
-import BidTimingCell from '../cell/bid-timing';
-import DunePriceCell from '../cell/dune-price-cell';
+import BidTimingCell from '../cell/bid-timing-cell';
 import FeeCell from '../cell/fee-cell';
 import PriceCell from '../cell/price-cell';
 import SwapCell from '../cell/swap-cell';
@@ -65,7 +64,7 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
           <TableHead className='w-auto'>Filler</TableHead>
           <TableHead className='w-auto'>Swap</TableHead>
           <TableHead className='w-auto'>Price</TableHead>
-          <TableHead className='w-auto'>Price (Dune)</TableHead>
+          {/* <TableHead className='w-auto'>Price (Dune)</TableHead> */}
           <TableHead className='w-auto'>Bid Timing</TableHead>
           <TableHead className='w-auto'>Fee</TableHead>
           <TableHead className='w-auto'>Liquidity Source</TableHead>
@@ -97,19 +96,23 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
               }
               chainId={chainId}
             />
-            <DunePriceCell
+            {/* <DunePriceCell
               input={intent.info.input}
               output={intent.info.outputs[0]}
               executedAt={intent.resultInfo.executedAt}
               chainId={chainId}
-            />
+            /> */}
             <BidTimingCell
               input={intent.resultInfo.input}
               auctionInput={intent.info.input}
               auctionInputOverride={intent.info.cosignerData.inputOverride}
-              output={intent.resultInfo.outputToSwapper}
-              auctionOutput={intent.info.outputs[0]}
-              auctionOutputOverride={intent.info.cosignerData.outputOverrides[0]}
+              outputs={
+                intent.resultInfo.outputToPayee
+                  ? [intent.resultInfo.outputToSwapper, intent.resultInfo.outputToPayee]
+                  : [intent.resultInfo.outputToSwapper]
+              }
+              auctionOutputs={intent.info.outputs}
+              auctionOutputOverrides={intent.info.cosignerData.outputOverrides}
               chainId={chainId}
             />
             <FeeCell auctionOutputs={intent.info.outputs} chainId={chainId} />

@@ -2,11 +2,12 @@
 
 import { DuneClient, QueryParameter } from '@duneanalytics/client-sdk';
 import { DutchInput, DutchOutput } from '@uniswap/uniswapx-sdk';
+import Decimal from 'decimal.js';
 import React, { useEffect } from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
-import { roundToSignificantDigits } from '@/lib/utils';
+import { decimalToShow } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 
 const DunePriceCell = (props: { input: DutchInput; output: DutchOutput; executedAt: number; chainId: ChainId }) => {
@@ -22,9 +23,9 @@ const DunePriceCell = (props: { input: DutchInput; output: DutchOutput; executed
   // format executedAt to look like '2024-10-23 9:31'
   const minute = new Date(executedAt * 1000).toISOString().slice(0, 16).replace('T', ' ');
 
-  const [price, setPrice] = React.useState<number>(0);
+  const [price, setPrice] = React.useState<Decimal>(new Decimal(0));
 
-  const formattedPrice = roundToSignificantDigits(price, 6);
+  const priceToShow = decimalToShow(price, 6);
 
   useEffect(() => {
     const dune = new DuneClient(process.env.NEXT_PUBLIC_DUNE_API_KEY || '');
@@ -38,17 +39,16 @@ const DunePriceCell = (props: { input: DutchInput; output: DutchOutput; executed
         queryId: 4184064,
         query_parameters,
       });
-      console.log('dune API response', response);
       if (!response.result) {
         return;
       }
-      const price = response.result.rows[0]!.price! as number;
+      const price = new Decimal(response.result.rows[0]!.price! as number);
       setPrice(price);
     };
     fetchData();
   }, [token0, token1, minute]);
 
-  return <TableCell>{formattedPrice}</TableCell>;
+  return <TableCell>{priceToShow}</TableCell>;
 };
 
 export default DunePriceCell;

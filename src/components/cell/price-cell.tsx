@@ -1,12 +1,11 @@
 // components/price-cell.tsx
 
 import { BigNumber } from 'ethers';
-import { formatUnits } from 'ethers/lib/utils';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
-import { DivideAsStrings, roundToSignificantDigits } from '@/lib/utils';
+import { bigNumberToDecimal, decimalToShow } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
 
@@ -16,14 +15,14 @@ const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId:
 
   const inInfo = ERC20[chainId][input.token] || undefined;
   const inName = inInfo ? inInfo.name : '???';
-  const inAmount = inInfo ? formatUnits(input.amount, inInfo.decimals) : formatUnits(input.amount, 18);
+  const inAmount = inInfo ? bigNumberToDecimal(input.amount, inInfo.decimals) : bigNumberToDecimal(input.amount, 18);
 
   const outInfo = ERC20[chainId][outToken] || undefined;
   const outName = outInfo ? outInfo.name : '???';
   const unformattedOutAmount = outputs.reduce((acc, output) => acc.add(output.amount), BigNumber.from(0));
   const outAmount = outInfo
-    ? formatUnits(unformattedOutAmount, outInfo.decimals)
-    : formatUnits(unformattedOutAmount, 18);
+    ? bigNumberToDecimal(unformattedOutAmount, outInfo.decimals)
+    : bigNumberToDecimal(unformattedOutAmount, 18);
 
   // ex) in Arbitrum
   // - input token:
@@ -54,11 +53,12 @@ const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId:
     token1Amount = inAmount;
   }
 
-  const price = DivideAsStrings(token1Amount, token0Amount);
+  const price = token1Amount.div(token0Amount);
+  const priceToShow = decimalToShow(price, 6);
 
   return (
     <TableCell>
-      {`${roundToSignificantDigits(price, 6)} ${token0Name}/${token1Name}`}
+      {`${priceToShow} ${token0Name}/${token1Name}`}
       {orderType === 'buy' ? (
         <span className='text-sm text-teal-500'> buy</span>
       ) : (

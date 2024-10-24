@@ -5,7 +5,7 @@ import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
-import { formatTokenAmount } from '@/lib/utils';
+import { bigNumberToDecimal, decimalToShow } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
 
@@ -15,16 +15,19 @@ const SwapCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId: 
 
   const inInfo = ERC20[chainId][input.token] || undefined;
   const inName = inInfo ? inInfo.name : '???';
-  const inAmount = inInfo ? formatTokenAmount(input.amount, inInfo.decimals) : formatTokenAmount(input.amount, 18);
+  const inAmount = inInfo ? bigNumberToDecimal(input.amount, inInfo.decimals) : bigNumberToDecimal(input.amount, 18);
 
   const outInfo = ERC20[chainId][outToken] || undefined;
   const outName = outInfo ? outInfo.name : '???';
   const unformattedOutAmount = outputs.reduce((acc, output) => acc.add(output.amount), BigNumber.from(0));
   const outAmount = outInfo
-    ? formatTokenAmount(unformattedOutAmount, outInfo.decimals)
-    : formatTokenAmount(unformattedOutAmount, 18);
+    ? bigNumberToDecimal(unformattedOutAmount, outInfo.decimals)
+    : bigNumberToDecimal(unformattedOutAmount, 18);
 
-  return <TableCell>{`${inAmount} ${inName} -> ${outAmount} ${outName}`}</TableCell>;
+  const inAmountToShow = decimalToShow(inAmount, 6);
+  const outAmountToShow = decimalToShow(outAmount, 6);
+
+  return <TableCell>{`${inAmountToShow} ${inName} -> ${outAmountToShow} ${outName}`}</TableCell>;
 };
 
 export default SwapCell;
