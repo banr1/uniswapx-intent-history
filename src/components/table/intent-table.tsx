@@ -11,6 +11,7 @@ import { ChainId } from '@/types/chain-id';
 import { FilledCosignedV2DutchOrder } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
 
+import AnotherPriceCell from '../cell/another-price-cell';
 import BidTimingCell from '../cell/bid-timing-cell';
 import FeeCell from '../cell/fee-cell';
 import PriceCell from '../cell/price-cell';
@@ -28,7 +29,7 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
       try {
         const intents = await fetchIntents({
           chainId,
-          limit: 50,
+          limit: 20,
           orderStatus: status,
           sortKey: 'createdAt',
           desc: true,
@@ -64,7 +65,7 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
           <TableHead className='w-auto'>Filler</TableHead>
           <TableHead className='w-auto'>Swap</TableHead>
           <TableHead className='w-auto'>Price</TableHead>
-          {/* <TableHead className='w-auto'>Price (Dune)</TableHead> */}
+          <TableHead className='w-auto'>Price (Binance)</TableHead>
           <TableHead className='w-auto'>Bid Timing</TableHead>
           <TableHead className='w-auto'>Fee</TableHead>
           <TableHead className='w-auto'>Liquidity Source</TableHead>
@@ -96,12 +97,12 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
               }
               chainId={chainId}
             />
-            {/* <DunePriceCell
+            <AnotherPriceCell
               input={intent.info.input}
               output={intent.info.outputs[0]}
               executedAt={intent.resultInfo.executedAt}
               chainId={chainId}
-            /> */}
+            />
             <BidTimingCell
               input={intent.resultInfo.input}
               auctionInput={intent.info.input}

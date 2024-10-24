@@ -4,6 +4,7 @@ import { BigNumber } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { twMerge } from 'tailwind-merge';
 
+import { SYMBOL_PRIORITY } from '@/components/cell/token-priority';
 import { Hash, ShortHash } from '@/types/hash';
 
 export function cn(...inputs: ClassValue[]) {
@@ -43,4 +44,11 @@ export function bigNumberToDecimal(num: BigNumber, decimals: number): Decimal {
 
 export function decimalToShow(num: Decimal, significantDigits: number = 6): string {
   return num.toSignificantDigits(significantDigits, Decimal.ROUND_HALF_UP).toString();
+}
+
+export function orderTokenNames(head: string, tail: string): [string, string] {
+  const headPriority = SYMBOL_PRIORITY.indexOf(head);
+  const tailPriority = SYMBOL_PRIORITY.indexOf(tail);
+
+  return headPriority > tailPriority ? [head, tail] : [tail, head];
 }
