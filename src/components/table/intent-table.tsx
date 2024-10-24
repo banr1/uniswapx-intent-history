@@ -12,6 +12,7 @@ import { FilledCosignedV2DutchOrder } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
 
 import BidTimingCell from '../cell/bid-timing';
+import DunePriceCell from '../cell/dune-price-cell';
 import FeeCell from '../cell/fee-cell';
 import PriceCell from '../cell/price-cell';
 import SwapCell from '../cell/swap-cell';
@@ -64,6 +65,7 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
           <TableHead className='w-auto'>Filler</TableHead>
           <TableHead className='w-auto'>Swap</TableHead>
           <TableHead className='w-auto'>Price</TableHead>
+          <TableHead className='w-auto'>Price (Dune)</TableHead>
           <TableHead className='w-auto'>Bid Timing</TableHead>
           <TableHead className='w-auto'>Fee</TableHead>
           <TableHead className='w-auto'>Liquidity Source</TableHead>
@@ -93,6 +95,12 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
                   ? [intent.resultInfo.outputToSwapper, intent.resultInfo.outputToPayee]
                   : [intent.resultInfo.outputToSwapper]
               }
+              chainId={chainId}
+            />
+            <DunePriceCell
+              input={intent.info.input}
+              output={intent.info.outputs[0]}
+              executedAt={intent.resultInfo.executedAt}
               chainId={chainId}
             />
             <BidTimingCell

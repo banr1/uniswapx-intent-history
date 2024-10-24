@@ -95,8 +95,6 @@ export async function fetchIntents(params: FetchOrdersParams): Promise<FilledCos
         } else if (outputFromFillerToSwapper === null) {
           throw new Error('Output transfer event from filler to swapper not found');
         }
-        console.log('outputFromFillerToSwapper', outputFromFillerToSwapper);
-        console.log('outputFromFillerToPayee', outputFromFillerToPayee);
 
         if (liquiditySources.length === 0) {
           liquiditySources.push('private');
