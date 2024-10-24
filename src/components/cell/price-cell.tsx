@@ -1,11 +1,12 @@
 // components/price-cell.tsx
 
 import { BigNumber } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
-import { DivideAsStrings, formatTokenAmount, roundToSignificantDigits } from '@/lib/utils';
+import { DivideAsStrings, roundToSignificantDigits } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
 
@@ -15,14 +16,14 @@ const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId:
 
   const inInfo = ERC20[chainId][input.token] || undefined;
   const inName = inInfo ? inInfo.name : '???';
-  const inAmount = inInfo ? formatTokenAmount(input.amount, inInfo.decimals) : formatTokenAmount(input.amount, 18);
+  const inAmount = inInfo ? formatUnits(input.amount, inInfo.decimals) : formatUnits(input.amount, 18);
 
   const outInfo = ERC20[chainId][outToken] || undefined;
   const outName = outInfo ? outInfo.name : '???';
   const unformattedOutAmount = outputs.reduce((acc, output) => acc.add(output.amount), BigNumber.from(0));
   const outAmount = outInfo
-    ? formatTokenAmount(unformattedOutAmount, outInfo.decimals)
-    : formatTokenAmount(unformattedOutAmount, 18);
+    ? formatUnits(unformattedOutAmount, outInfo.decimals)
+    : formatUnits(unformattedOutAmount, 18);
 
   // ex) in Arbitrum
   // - input token:
