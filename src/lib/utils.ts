@@ -6,6 +6,7 @@ import { twMerge } from 'tailwind-merge';
 
 import { SYMBOL_PRIORITY } from '@/components/cell/token-priority';
 import { Hash, ShortHash } from '@/types/hash';
+import { Side } from '@/types/side';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -47,8 +48,22 @@ export function decimalToShow(num: Decimal, significantDigits: number = 6): stri
 }
 
 export function orderTokenNames(head: string, tail: string): [string, string] {
-  const headPriority = SYMBOL_PRIORITY.indexOf(head);
-  const tailPriority = SYMBOL_PRIORITY.indexOf(tail);
+  const inputPriority = SYMBOL_PRIORITY.indexOf(head);
+  const outputPriority = SYMBOL_PRIORITY.indexOf(tail);
 
-  return headPriority > tailPriority ? [head, tail] : [tail, head];
+  return inputPriority > outputPriority ? [head, tail] : [tail, head];
+}
+
+export function orderTokenNamesAndAmounts(
+  input: string,
+  output: string,
+  inputAmount: Decimal,
+  outputAmount: Decimal,
+): [string, string, Decimal, Decimal, Side] {
+  const inputPriority = SYMBOL_PRIORITY.indexOf(input);
+  const outputPriority = SYMBOL_PRIORITY.indexOf(output);
+
+  return inputPriority > outputPriority
+    ? [input, output, inputAmount, outputAmount, 'sell'] // it's 'IN/OUT', so input is main token and main token's gonna be sold
+    : [output, input, outputAmount, inputAmount, 'buy']; // it's 'OUT/IN', so output is main token and main token's gonna be bought
 }
