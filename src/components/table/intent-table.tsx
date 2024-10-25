@@ -3,19 +3,14 @@
 import { OrderType } from '@uniswap/uniswapx-sdk';
 import { useEffect, useState } from 'react';
 
-import HashCell from '@/components/cell/hash-cell';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableHeader } from '@/components/ui/table';
 import { fetchIntents } from '@/lib/fetch-intents';
-import { formatTimestamp, numToDate } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledCosignedV2DutchOrder } from '@/types/dutch-intent-v2';
 import { IntentStatus } from '@/types/intent-status';
 
-import BidTimingCell from '../cell/bid-timing-cell';
-import BinancePriceCell from '../cell/binance-price-cell';
-import FeeCell from '../cell/fee-cell';
-import PriceCell from '../cell/price-cell';
-import SwapCell from '../cell/swap-cell';
+import IntentTableHead from './intent-table-head';
+import IntentRow from './intent-table-row';
 
 export default function IntentTable(props: { status: IntentStatus; chainId: ChainId; interval: number }): JSX.Element {
   const { status, chainId, interval } = props;
@@ -58,70 +53,11 @@ export default function IntentTable(props: { status: IntentStatus; chainId: Chai
   return (
     <Table>
       <TableHeader className='bg-gray-100'>
-        <TableRow>
-          <TableHead className='w-auto'>Tx Hash</TableHead>
-          <TableHead className='w-auto'>Swapper</TableHead>
-          <TableHead className='w-auto'>Cosigner</TableHead>
-          <TableHead className='w-auto'>Filler</TableHead>
-          <TableHead className='w-auto'>Swap</TableHead>
-          <TableHead className='w-auto'>Price</TableHead>
-          <TableHead className='w-auto'>
-            Price <span className='text-xs'>(Binance)</span>
-          </TableHead>
-          <TableHead className='w-auto'>Bid Timing</TableHead>
-          <TableHead className='w-auto'>Fee</TableHead>
-          <TableHead className='w-auto'>Liquidity Source</TableHead>
-          <TableHead className='w-auto'>Executed Time</TableHead>
-        </TableRow>
+        <IntentTableHead />
       </TableHeader>
       <TableBody>
         {intents.map((intent) => (
-          <TableRow key={intent.hash()}>
-            <HashCell value={intent.resultInfo.txHash} chainId={chainId} category='tx' />
-            <HashCell value={intent.info.swapper} chainId={chainId} category='wallet' />
-            <HashCell value={intent.info.cosigner} chainId={chainId} category='wallet' />
-            <HashCell value={intent.resultInfo.filler} chainId={chainId} category='wallet' />
-            <SwapCell
-              input={intent.resultInfo.input}
-              outputs={
-                intent.resultInfo.outputToPayee
-                  ? [intent.resultInfo.outputToSwapper, intent.resultInfo.outputToPayee]
-                  : [intent.resultInfo.outputToSwapper]
-              }
-              chainId={chainId}
-            />
-            <PriceCell
-              input={intent.resultInfo.input}
-              outputs={
-                intent.resultInfo.outputToPayee
-                  ? [intent.resultInfo.outputToSwapper, intent.resultInfo.outputToPayee]
-                  : [intent.resultInfo.outputToSwapper]
-              }
-              chainId={chainId}
-            />
-            <BinancePriceCell
-              input={intent.info.input}
-              output={intent.info.outputs[0]}
-              executedAt={intent.resultInfo.executedAt}
-              chainId={chainId}
-            />
-            <BidTimingCell
-              input={intent.resultInfo.input}
-              auctionInput={intent.info.input}
-              auctionInputOverride={intent.info.cosignerData.inputOverride}
-              outputs={
-                intent.resultInfo.outputToPayee
-                  ? [intent.resultInfo.outputToSwapper, intent.resultInfo.outputToPayee]
-                  : [intent.resultInfo.outputToSwapper]
-              }
-              auctionOutputs={intent.info.outputs}
-              auctionOutputOverrides={intent.info.cosignerData.outputOverrides}
-              chainId={chainId}
-            />
-            <FeeCell auctionOutputs={intent.info.outputs} chainId={chainId} />
-            <TableCell>{intent.resultInfo.liquiditySources.join(', ')}</TableCell>
-            <TableCell className='text-xs'>{formatTimestamp(numToDate(intent.resultInfo.executedAt))}</TableCell>
-          </TableRow>
+          <IntentRow key={intent.hash()} intent={intent} chainId={chainId} />
         ))}
       </TableBody>
     </Table>
