@@ -1,13 +1,15 @@
 // components/price-cell.tsx
 
+import Decimal from 'decimal.js';
 import { BigNumber } from 'ethers';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
 import { ERC20 } from '@/constants/erc20';
-import { bigNumberToDecimal, decimalToShow } from '@/lib/utils';
+import { bigNumberToDecimal, decimalToShow, orderTokenNames } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
+import { Side } from '@/types/side';
 
 const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId: ChainId }) => {
   const { input, outputs, chainId } = props;
@@ -38,17 +40,16 @@ const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId:
   // - price: 400 / 0.20 = 2000
   // - order type: Sell (token0 -> token1)
   // - order: Sell 2000 WETH/USDT
-  let orderType, token0Name, token0Amount, token1Name, token1Amount;
-  if (input.token < outToken) {
-    orderType = 'sell';
-    token0Name = inName;
-    token1Name = outName;
+  let side: Side | null = null;
+  let token0Amount: Decimal | null = null;
+  let token1Amount: Decimal | null = null;
+  const [token0Name, token1Name] = orderTokenNames(inName, outName);
+  if (token0Name === inName) {
+    side = 'sell';
     token0Amount = inAmount;
     token1Amount = outAmount;
   } else {
-    orderType = 'buy';
-    token0Name = outName;
-    token1Name = inName;
+    side = 'buy';
     token0Amount = outAmount;
     token1Amount = inAmount;
   }
@@ -58,12 +59,11 @@ const PriceCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId:
 
   return (
     <TableCell>
-      {`${priceToShow} ${token0Name}/${token1Name}`}
-      {orderType === 'buy' ? (
-        <span className='text-sm text-teal-500'> buy</span>
-      ) : (
-        <span className='text-sm text-pink-500'> sell</span>
-      )}
+      {`${priceToShow} `}
+      <span className='text-xs text-gray-700'>
+        {`${token0Name}/${token1Name}`}
+        <span className={side === 'buy' ? 'text-teal-500' : 'text-pink-500'}>{` ${side}`}</span>
+      </span>
     </TableCell>
   );
 };

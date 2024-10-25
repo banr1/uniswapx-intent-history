@@ -27,7 +27,14 @@ const SwapCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId: 
   const inAmountToShow = decimalToShow(inAmount, 6);
   const outAmountToShow = decimalToShow(outAmount, 6);
 
-  return <TableCell>{`${inAmountToShow} ${inName} -> ${outAmountToShow} ${outName}`}</TableCell>;
+  return (
+    <TableCell>
+      {`${inAmountToShow} `}
+      <span className='text-xs text-gray-700'>{inName}</span>
+      {` -> ${outAmountToShow} `}
+      <span className='text-xs text-gray-700'>{outName}</span>
+    </TableCell>
+  );
 };
 
 export default SwapCell;

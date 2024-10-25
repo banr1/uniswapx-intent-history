@@ -1,0 +1,28 @@
+// constants/binance-supported-pairs.ts
+
+export const BINANCE_SUPPORTED_PAIRS = [
+  'ETHUSDC',
+  'ETHUSDT',
+  'ETHBTC',
+  'BTCUSDC',
+  'BTCUSDT',
+  'ARBUSDC',
+  'ARBUSDT',
+  'USDCUSDT',
+  'USDTDAI',
+  'LINKUSDT',
+  'LINKBTC',
+  'UNIUSDT',
+  'CRVUSDT',
+  'LDOUSDT',
+  'MATICUSDT',
+  'MATICBTC',
+  'MATICETH',
+  'AAVEUSDT',
+  'LPTUSDT',
+  'ENSUSDT',
+  '1INCHUSDT',
+  'COMPUSDT',
+  'GRTUSDT',
+  'AXLUSDT',
+];

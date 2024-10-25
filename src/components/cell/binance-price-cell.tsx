@@ -1,25 +1,36 @@
 // components/binance-price-cell.tsx
 
+import { DutchInput, DutchOutput } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 import Decimal from 'decimal.js';
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { TableCell } from '@/components/ui/table';
-import { decimalToShow } from '@/lib/utils';
+import { BINANCE_SUPPORTED_PAIRS } from '@/constants/binance-supported-pairs';
+import { ERC20 } from '@/constants/erc20';
+import { decimalToShow, orderTokenNames } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 
-const BinancePriceCell = (props: { pair: string; executedAt: number; chainId: ChainId }) => {
-  const { pair, executedAt, chainId } = props;
+import { TableCell } from '../ui/table';
+
+const BinancePriceCell = (props: { input: DutchInput; output: DutchOutput; executedAt: number; chainId: ChainId }) => {
+  const { input, output, executedAt, chainId } = props;
+  const [price, setPrice] = useState<Decimal>(new Decimal(0));
+  const priceToShow = decimalToShow(price, 6);
+
+  const inName = ERC20[chainId][input.token].name;
+  const outName = ERC20[chainId][output.token].name;
   const executedTime = executedAt * 1000;
 
-  const [price, setPrice] = React.useState<Decimal>(new Decimal(0));
-
-  const priceToShow = decimalToShow(price, 6);
+  const inNameOfBinance = inName === 'WETH' ? 'ETH' : inName === 'WBTC' ? 'BTC' : inName;
+  const outNameOfBinance = outName === 'WETH' ? 'ETH' : outName === 'WBTC' ? 'BTC' : outName;
+  const token0And1OfBinance = orderTokenNames(inNameOfBinance, outNameOfBinance);
+  const pairOfBinance = token0And1OfBinance.join('');
+  const pair = token0And1OfBinance.join('/');
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `https://api.binance.com/api/v3/klines?symbol=${pair}&limit=5&interval=1s&startTime=${executedTime}&endTime=${executedTime}`,
+        `https://api.binance.com/api/v3/klines?symbol=${pairOfBinance}&limit=5&interval=1s&startTime=${executedTime}&endTime=${executedTime}`,
       );
       if (!response.data) {
         return;
@@ -30,9 +41,18 @@ const BinancePriceCell = (props: { pair: string; executedAt: number; chainId: Ch
       setPrice(price);
     };
     fetchData();
-  }, [pair, executedTime]);
+  }, [pairOfBinance, executedTime]);
 
-  return <TableCell>{priceToShow}</TableCell>;
+  if (!BINANCE_SUPPORTED_PAIRS.includes(pairOfBinance)) {
+    return <TableCell className='text-gray-500'>-</TableCell>;
+  }
+
+  return (
+    <TableCell>
+      {`${priceToShow} `}
+      <span className='text-xs text-gray-700'>{pair}</span>
+    </TableCell>
+  );
 };
 
 export default BinancePriceCell;
