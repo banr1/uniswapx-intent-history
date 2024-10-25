@@ -7,9 +7,9 @@ import { shortenHash } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { Hash, HashCategory } from '@/types/hash';
 
-import { TenderlyLink } from '../tenderly-link';
+import TenderlyLink from '../tenderly-link';
 
-const HashCell = (props: { value: Hash | null; chainId: ChainId; category: HashCategory }) => {
+export default function HashCell(props: { value: Hash | null; chainId: ChainId; category: HashCategory }): JSX.Element {
   const { value, chainId, category } = props;
 
   if (!value) {
@@ -25,6 +25,4 @@ const HashCell = (props: { value: Hash | null; chainId: ChainId; category: HashC
       </TenderlyLink>
     </TableCell>
   );
-};
-
-export default HashCell;
+}

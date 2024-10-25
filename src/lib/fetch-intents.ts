@@ -1,15 +1,17 @@
 // lib/fetch-orders.ts
 
-import { CosignedV2DutchOrder } from '@uniswap/uniswapx-sdk';
+import { CosignedV2DutchOrder, OrderType } from '@uniswap/uniswapx-sdk';
 import axios from 'axios';
 
 import { UNISWAPX_API_ENDPOINT } from '@/constants/api-endpoint';
 import { UNISWAP_FEE_PAYEE_ADDRESSES } from '@/constants/uniswap-fee-payee-addresses';
 import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses';
+import { ChainId } from '@/types/chain-id';
 import { CosignedV2DutchOrderResultInfo, FilledCosignedV2DutchOrder, RawDutchIntentV2 } from '@/types/dutch-intent-v2';
 import { FetchOrdersParams } from '@/types/fetch-orders-params';
 import { FilledToken } from '@/types/filled-token';
 import { Address } from '@/types/hash';
+import { IntentStatus } from '@/types/intent-status';
 import { LiquiditySource } from '@/types/liquidity-source';
 
 import fetchBlockTimestamp from './fetch-block-timestamp';
@@ -17,8 +19,21 @@ import fetchFillEvent from './fetch-fill-event';
 import fetchTransferEvents from './fetch-transfer-event';
 import fetchTxReceipt from './fetch-tx-receipt';
 
-export async function fetchIntents(params: FetchOrdersParams): Promise<FilledCosignedV2DutchOrder[]> {
-  const res = await axios.get<{ orders: RawDutchIntentV2[] }>(UNISWAPX_API_ENDPOINT, { params });
+export async function fetchIntents(params: {
+  chainId: ChainId;
+  limit: number;
+  orderStatus: IntentStatus;
+  orderType: OrderType;
+}): Promise<FilledCosignedV2DutchOrder[]> {
+  const totalParams: FetchOrdersParams = {
+    sortKey: 'createdAt',
+    desc: true,
+    sort: 'lt(9000000000)',
+    includeV2: params.orderType === OrderType.Dutch_V2,
+    ...params,
+  };
+
+  const res = await axios.get<{ orders: RawDutchIntentV2[] }>(UNISWAPX_API_ENDPOINT, { params: totalParams });
   const rawIntents = res.data.orders;
 
   const intents: FilledCosignedV2DutchOrder[] = await Promise.all(

@@ -9,7 +9,7 @@ import { bigNumberToDecimal, decimalToShow } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledToken } from '@/types/filled-token';
 
-const SwapCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId: ChainId }) => {
+export default function SwapCell(props: { input: FilledToken; outputs: FilledToken[]; chainId: ChainId }): JSX.Element {
   const { input, outputs, chainId } = props;
   const outToken = outputs[0].token;
 
@@ -35,6 +35,4 @@ const SwapCell = (props: { input: FilledToken; outputs: FilledToken[]; chainId: 
       <span className='text-xs text-gray-700'>{outName}</span>
     </TableCell>
   );
-};
-
-export default SwapCell;
+}

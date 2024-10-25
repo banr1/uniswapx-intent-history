@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { twMerge } from 'tailwind-merge';
 
-import { SYMBOL_PRIORITY } from '@/components/cell/token-priority';
+import { SYMBOL_PRIORITY } from '@/constants/token-priority';
 import { Hash, ShortHash } from '@/types/hash';
 import { Side } from '@/types/side';
 

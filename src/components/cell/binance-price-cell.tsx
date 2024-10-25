@@ -6,7 +6,7 @@ import { decimalToShow } from '@/lib/utils';
 
 import { TableCell } from '../ui/table';
 
-const BinancePriceCell = (props: { price: Decimal | null; token0And1: [string, string] }) => {
+export default function BinancePriceCell(props: { price: Decimal | null; token0And1: [string, string] }): JSX.Element {
   const { price, token0And1 } = props;
 
   if (!price) {
@@ -22,6 +22,4 @@ const BinancePriceCell = (props: { price: Decimal | null; token0And1: [string, s
       <span className='text-xs text-gray-700'>{pair}</span>
     </TableCell>
   );
-};
-
-export default BinancePriceCell;
+}

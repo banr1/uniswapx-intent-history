@@ -13,7 +13,7 @@ import { FilledToken } from '@/types/filled-token';
 
 // Calculate the percentage of the auction that has been executed
 // We don't need to use all of the output tokens to calculate this percentage
-const BidTimingCell = (props: {
+export default function BidTimingCell(props: {
   input: FilledToken;
   auctionInput: DutchInput;
   auctionInputOverride: BigNumber;
@@ -21,7 +21,7 @@ const BidTimingCell = (props: {
   auctionOutputs: DutchOutput[];
   auctionOutputOverrides: BigNumber[];
   chainId: ChainId;
-}) => {
+}): JSX.Element {
   const { input, auctionInput, auctionInputOverride, outputs, auctionOutputs, auctionOutputOverrides, chainId } = props;
 
   const inDecimals = ERC20[chainId][auctionInput.token]?.decimals || 18;
@@ -78,6 +78,4 @@ const BidTimingCell = (props: {
       <span className='text-xs text-gray-600'>%</span>
     </TableCell>
   );
-};
-
-export default BidTimingCell;
+}

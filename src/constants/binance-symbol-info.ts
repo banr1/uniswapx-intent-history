@@ -1,4 +1,4 @@
-// constants/binance-supported-pairs.ts
+// constants/binance-symbol-info.ts
 
 import Decimal from 'decimal.js';
 

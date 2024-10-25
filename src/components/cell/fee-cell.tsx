@@ -10,7 +10,7 @@ import { UNISWAP_FEE_PAYEE_ADDRESSES } from '@/constants/uniswap-fee-payee-addre
 import { bigNumberToDecimal, decimalToShow } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 
-const FeeCell = (props: { auctionOutputs: DutchOutput[]; chainId: ChainId }) => {
+export default function FeeCell(props: { auctionOutputs: DutchOutput[]; chainId: ChainId }): JSX.Element {
   const { auctionOutputs, chainId } = props;
   const feePayeeAddresses = UNISWAP_FEE_PAYEE_ADDRESSES[chainId];
 
@@ -39,6 +39,4 @@ const FeeCell = (props: { auctionOutputs: DutchOutput[]; chainId: ChainId }) => 
       <span className='text-xs text-gray-600'>%</span>
     </TableCell>
   );
-};
-
-export default FeeCell;
+}

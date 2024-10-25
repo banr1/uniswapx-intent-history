@@ -7,7 +7,7 @@ import { TableCell } from '@/components/ui/table';
 import { decimalToShow } from '@/lib/utils';
 import { Side } from '@/types/side';
 
-const PriceCell = (props: { price: Decimal; token0And1: [string, string]; side: Side }) => {
+export default function PriceCell(props: { price: Decimal; token0And1: [string, string]; side: Side }): JSX.Element {
   const { price, token0And1, side } = props;
   const pair = token0And1.join('/');
 
@@ -22,6 +22,4 @@ const PriceCell = (props: { price: Decimal; token0And1: [string, string]; side: 
       </span>
     </TableCell>
   );
-};
-
-export default PriceCell;
+}

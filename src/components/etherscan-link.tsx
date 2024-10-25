@@ -10,12 +10,12 @@ const BASE_URLS: Record<ChainId, string> = {
   42161: 'https://arbiscan.io',
 };
 
-export const EtherscanLink = (props: {
+export default function EtherscanLink(props: {
   value: string;
   chainId: ChainId;
   category: HashCategory;
   children: React.ReactNode;
-}) => {
+}): JSX.Element {
   const { value, category, chainId } = props;
   const etherscanCategory: EtherscanCategory = ['wallet', 'contract'].includes(category)
     ? 'address'
@@ -32,4 +32,4 @@ export const EtherscanLink = (props: {
       </a>
     </div>
   );
-};
+}

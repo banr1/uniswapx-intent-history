@@ -4,16 +4,16 @@ import Decimal from 'decimal.js';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
-import { BINANCE_SYMBOL_INFO } from '@/constants/binance-supported-pairs';
+import { BINANCE_SYMBOL_INFO } from '@/constants/binance-symbol-info';
 import { decimalToShow } from '@/lib/utils';
 import { Side } from '@/types/side';
 
-const ReasonableIndexCell = (props: {
+export default function ReasonableIndexCell(props: {
   price: Decimal;
   side: Side;
   binancePrice: Decimal | null;
   binanceToken0and1: [string, string];
-}) => {
+}): JSX.Element {
   const { price, side, binancePrice, binanceToken0and1 } = props;
 
   if (!binancePrice) {
@@ -38,6 +38,4 @@ const ReasonableIndexCell = (props: {
       <span className='text-xs'>x</span>
     </TableCell>
   );
-};
-
-export default ReasonableIndexCell;
+}

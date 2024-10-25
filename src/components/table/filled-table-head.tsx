@@ -1,8 +1,8 @@
-// components/intent-table-head.tsx
+// components/filled-table-head.tsx
 
 import { TableHead, TableRow } from '../ui/table';
 
-const IntentTableHead = (): JSX.Element => {
+export default function FilledTableHead(): JSX.Element {
   return (
     <TableRow>
       <TableHead className='w-auto'>Tx Hash</TableHead>
@@ -22,6 +22,4 @@ const IntentTableHead = (): JSX.Element => {
       <TableHead className='w-auto'>Executed Time</TableHead>
     </TableRow>
   );
-};
-
-export default IntentTableHead;
+}

@@ -1,4 +1,4 @@
-// components/intent-table-row.tsx
+// components/filled-table-row.tsx
 
 import axios from 'axios';
 import Decimal from 'decimal.js';
@@ -25,12 +25,13 @@ import PriceCell from '../cell/price-cell';
 import ReasonableIndexCell from '../cell/reasonable-index-cell';
 import SwapCell from '../cell/swap-cell';
 
-interface IntentTableRowProps {
+interface FilledTableRowProps {
   intent: FilledCosignedV2DutchOrder;
   chainId: ChainId;
 }
 
-const IntentTableRow: React.FC<IntentTableRowProps> = ({ intent, chainId }) => {
+export default function FilledTableRow(props: FilledTableRowProps): JSX.Element {
+  const { intent, chainId } = props;
   const { info, resultInfo } = intent;
   const { swapper, cosigner, input: auctionInput, outputs: auctionOutputs, cosignerData } = info;
   const { txHash, filler, input, outputToSwapper, outputToPayee, executedAt, liquiditySources } = resultInfo;
@@ -106,6 +107,4 @@ const IntentTableRow: React.FC<IntentTableRowProps> = ({ intent, chainId }) => {
       <TableCell className='text-xs'>{formatTimestamp(numToDate(intent.resultInfo.executedAt))}</TableCell>
     </TableRow>
   );
-};
-
-export default IntentTableRow;
+}

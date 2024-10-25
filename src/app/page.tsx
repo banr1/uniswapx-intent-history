@@ -2,10 +2,11 @@
 
 'use client';
 
+import { OrderType } from '@uniswap/uniswapx-sdk';
 import { useState } from 'react';
 
-import IntentTable from '@/components/table/intent-table';
-import { TenderlyLink } from '@/components/tenderly-link';
+import FilledTable from '@/components/table/filled-table';
+import TenderlyLink from '@/components/tenderly-link';
 import { UNISWAP_FEE_PAYEE_ADDRESSES } from '@/constants/uniswap-fee-payee-addresses';
 import { UNISWAP_REACTOR_ADDRESSES } from '@/constants/uniswap-reactor-addresses';
 import { shortenHash } from '@/lib/utils';
@@ -35,7 +36,7 @@ export default function Home() {
           {shortenHash(feePayeeAddresses[1])}
         </TenderlyLink>
       </div>
-      <IntentTable status={'filled'} chainId={chainId} interval={60_000} />
+      <FilledTable intentType={OrderType.Dutch_V2} chainId={chainId} interval={60_000} />
     </div>
   );
 }
