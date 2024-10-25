@@ -10,7 +10,7 @@ const BinancePriceCell = (props: { price: Decimal | null; token0And1: [string, s
   const { price, token0And1 } = props;
 
   if (!price) {
-    return <TableCell>-</TableCell>;
+    return <TableCell className='text-xs text-gray-700'>-</TableCell>;
   }
 
   const priceToShow = decimalToShow(price, 6);

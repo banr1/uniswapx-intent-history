@@ -24,14 +24,12 @@ const BidTimingCell = (props: {
 }) => {
   const { input, auctionInput, auctionInputOverride, outputs, auctionOutputs, auctionOutputOverrides, chainId } = props;
 
-  const inInfo = ERC20[chainId][input.token];
-  const inDecimals = inInfo ? inInfo.decimals : 18;
+  const inDecimals = ERC20[chainId][auctionInput.token]?.decimals || 18;
   const inStartAmount = bigNumberToDecimal(auctionInput.startAmount, inDecimals);
   const inEndAmount = bigNumberToDecimal(auctionInput.endAmount, inDecimals);
   const inExecutionAmount = bigNumberToDecimal(input.amount, inDecimals);
 
-  const outInfo = ERC20[chainId][outputs[0].token];
-  const outDecimals = outInfo ? outInfo.decimals : 18;
+  const outDecimals = ERC20[chainId][outputs[0].token]?.decimals || 18;
   const outStartAmount = bigNumberToDecimal(
     auctionOutputs.map((output) => output.startAmount).reduce((a, b) => a.add(b), BigNumber.from(0)),
     outDecimals,
@@ -74,7 +72,12 @@ const BidTimingCell = (props: {
   }
   const executionPercentageToShow = decimalToShow(executionPercentage, 4);
 
-  return <TableCell>{`${executionPercentageToShow}%`}</TableCell>;
+  return (
+    <TableCell>
+      {executionPercentageToShow}
+      <span className='text-xs text-gray-600'>%</span>
+    </TableCell>
+  );
 };
 
 export default BidTimingCell;

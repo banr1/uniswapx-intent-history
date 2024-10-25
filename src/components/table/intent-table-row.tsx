@@ -82,20 +82,21 @@ const IntentTableRow: React.FC<IntentTableRowProps> = ({ intent, chainId }) => {
       <HashCell value={swapper} chainId={chainId} category='wallet' />
       <HashCell value={cosigner} chainId={chainId} category='wallet' />
       <HashCell value={filler} chainId={chainId} category='wallet' />
-      <SwapCell
-        input={input}
-        outputs={outputToPayee ? [outputToSwapper, outputToPayee] : [outputToSwapper]}
-        chainId={chainId}
-      />
+      <SwapCell input={input} outputs={outputs} chainId={chainId} />
       <PriceCell price={price} token0And1={[token0Name, token1Name]} side={side} />
       <BinancePriceCell price={binancePrice} token0And1={token0And1OfBinance} />
       {/* <PriceGapCell price={price} side={side} binancePrice={binancePrice} /> */}
-      <ReasonableIndexCell price={price} side={side} binancePrice={binancePrice} />
+      <ReasonableIndexCell
+        price={price}
+        side={side}
+        binancePrice={binancePrice}
+        binanceToken0and1={token0And1OfBinance}
+      />
       <BidTimingCell
         input={input}
         auctionInput={auctionInput}
         auctionInputOverride={cosignerData.inputOverride}
-        outputs={outputToPayee ? [outputToSwapper, outputToPayee] : [outputToSwapper]}
+        outputs={outputs}
         auctionOutputs={auctionOutputs}
         auctionOutputOverrides={cosignerData.outputOverrides}
         chainId={chainId}

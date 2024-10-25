@@ -12,14 +12,16 @@ import { TenderlyLink } from '../tenderly-link';
 const HashCell = (props: { value: Hash | null; chainId: ChainId; category: HashCategory }) => {
   const { value, chainId, category } = props;
 
-  if (value === null) {
-    return <TableCell>-</TableCell>;
+  if (!value) {
+    return <TableCell className='text-xs'>-</TableCell>;
   }
+
+  const valueToShow = shortenHash(value);
 
   return (
     <TableCell className='text-xs'>
       <TenderlyLink value={value} chainId={chainId} category={category}>
-        {shortenHash(value)}
+        {valueToShow}
       </TenderlyLink>
     </TableCell>
   );

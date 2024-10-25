@@ -4,23 +4,40 @@ import Decimal from 'decimal.js';
 import React from 'react';
 
 import { TableCell } from '@/components/ui/table';
+import { BINANCE_SYMBOL_INFO } from '@/constants/binance-supported-pairs';
 import { decimalToShow } from '@/lib/utils';
 import { Side } from '@/types/side';
 
-const ReasonableIndexCell = (props: { price: Decimal; side: Side; binancePrice: Decimal | null }) => {
-  const { price, side, binancePrice } = props;
+const ReasonableIndexCell = (props: {
+  price: Decimal;
+  side: Side;
+  binancePrice: Decimal | null;
+  binanceToken0and1: [string, string];
+}) => {
+  const { price, side, binancePrice, binanceToken0and1 } = props;
 
   if (!binancePrice) {
-    return <TableCell>-</TableCell>;
+    return <TableCell className='text-xs text-gray-600'>-</TableCell>;
   }
 
   const sideMultiplier = side === 'buy' ? 1 : -1;
   const priceGap = binancePrice.sub(price).mul(sideMultiplier);
-  const gapRatio = priceGap.div(binancePrice);
-  const isPlus = gapRatio.greaterThanOrEqualTo(0);
-  const gapRatioToShow = isPlus ? `+${decimalToShow(gapRatio, 3)}%` : `${decimalToShow(gapRatio, 3)}%`;
+  const symbolInfo = BINANCE_SYMBOL_INFO[binanceToken0and1.join('/')];
+  if (!symbolInfo) {
+    return <TableCell className='text-xs text-gray-600'>-</TableCell>;
+  }
 
-  return <TableCell className={isPlus ? 'text-sky-500' : 'text-rose-500'}>{gapRatioToShow}</TableCell>;
+  const halfSpread = symbolInfo.spread.div(2);
+  const reasonableIdx = priceGap.div(halfSpread);
+  const isPlus = reasonableIdx.greaterThanOrEqualTo(0);
+  const reasonableIdxToShow = isPlus ? `+${decimalToShow(reasonableIdx, 4)}` : decimalToShow(reasonableIdx, 4);
+
+  return (
+    <TableCell className={isPlus ? 'text-sky-500' : 'text-rose-500'}>
+      {reasonableIdxToShow}
+      <span className='text-xs'>x</span>
+    </TableCell>
+  );
 };
 
 export default ReasonableIndexCell;
