@@ -22,6 +22,7 @@ import BidTimingCell from '../cell/bid-timing-cell';
 import BinancePriceCell from '../cell/binance-price-cell';
 import FeeCell from '../cell/fee-cell';
 import PriceCell from '../cell/price-cell';
+import ReasonableIndexCell from '../cell/reasonable-index-cell';
 import SwapCell from '../cell/swap-cell';
 
 interface IntentTableRowProps {
@@ -35,7 +36,7 @@ const IntentTableRow: React.FC<IntentTableRowProps> = ({ intent, chainId }) => {
   const { txHash, filler, input, outputToSwapper, outputToPayee, executedAt, liquiditySources } = resultInfo;
   const outputs = outputToPayee ? [outputToSwapper, outputToPayee] : [outputToSwapper];
 
-  const [binancePrice, setBinancePrice] = useState<Decimal>(new Decimal(0));
+  const [binancePrice, setBinancePrice] = useState<Decimal | null>(null);
 
   const inInfo = ERC20[chainId][input.token];
   const outInfo = ERC20[chainId][outputToSwapper.token];
@@ -69,7 +70,7 @@ const IntentTableRow: React.FC<IntentTableRowProps> = ({ intent, chainId }) => {
       }
       const openPrice = new Decimal(response.data[0][1]);
       const closePrice = new Decimal(response.data[0][4]);
-      const price = openPrice.add(closePrice).div(2);
+      const price = openPrice !== new Decimal(0) ? openPrice.add(closePrice).div(2) : null;
       setBinancePrice(price);
     };
     fetchData();
@@ -88,6 +89,8 @@ const IntentTableRow: React.FC<IntentTableRowProps> = ({ intent, chainId }) => {
       />
       <PriceCell price={price} token0And1={[token0Name, token1Name]} side={side} />
       <BinancePriceCell price={binancePrice} token0And1={token0And1OfBinance} />
+      {/* <PriceGapCell price={price} side={side} binancePrice={binancePrice} /> */}
+      <ReasonableIndexCell price={price} side={side} binancePrice={binancePrice} />
       <BidTimingCell
         input={input}
         auctionInput={auctionInput}

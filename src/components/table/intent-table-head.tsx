@@ -14,6 +14,8 @@ const IntentTableHead = (): JSX.Element => {
       <TableHead className='w-auto'>
         Price <span className='text-xs'>(Binance)</span>
       </TableHead>
+      {/* <TableHead className='w-auto'>Price Gap</TableHead> */}
+      <TableHead className='w-auto'>Reasonable Index</TableHead>
       <TableHead className='w-auto'>Bid Timing</TableHead>
       <TableHead className='w-auto'>Fee</TableHead>
       <TableHead className='w-auto'>Liquidity Source</TableHead>
