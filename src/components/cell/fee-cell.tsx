@@ -19,12 +19,13 @@ const FeeCell = (props: { auctionOutputs: DutchOutput[]; chainId: ChainId }) => 
     return <TableCell>0%</TableCell>;
   }
 
-  const outDecimal = ERC20[chainId][auctionOutputs[0].token].decimals;
+  const outInfo = ERC20[chainId][auctionOutputs[0].token];
+  const outDecimals = outInfo ? outInfo.decimals : 18;
   const totalStartAmount = bigNumberToDecimal(
-    auctionOutputs.reduce((acc, output) => acc.add(output.startAmount), BigNumber.from(0)),
-    outDecimal,
+    auctionOutputs.map((output) => output.startAmount).reduce((a, b) => a.add(b), BigNumber.from(0)),
+    outDecimals,
   );
-  const payeeStartAmount = bigNumberToDecimal(payeeToken.startAmount, outDecimal);
+  const payeeStartAmount = bigNumberToDecimal(payeeToken.startAmount, outDecimals);
 
   const fee = payeeStartAmount.div(totalStartAmount).mul(100);
   const feeToShow = decimalToShow(fee, 3);

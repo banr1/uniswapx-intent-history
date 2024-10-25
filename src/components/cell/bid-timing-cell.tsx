@@ -24,28 +24,25 @@ const BidTimingCell = (props: {
 }) => {
   const { input, auctionInput, auctionInputOverride, outputs, auctionOutputs, auctionOutputOverrides, chainId } = props;
 
-  const inDecimal = ERC20[chainId][input.token].decimals;
-  const inStartAmount = bigNumberToDecimal(auctionInput.startAmount, inDecimal);
-  // const inOverriddenStartAmount = bigNumberToDecimal(auctionInputOverride, inDecimal);
-  const inEndAmount = bigNumberToDecimal(auctionInput.endAmount, inDecimal);
-  const inExecutionAmount = bigNumberToDecimal(input.amount, inDecimal);
+  const inInfo = ERC20[chainId][input.token];
+  const inDecimals = inInfo ? inInfo.decimals : 18;
+  const inStartAmount = bigNumberToDecimal(auctionInput.startAmount, inDecimals);
+  const inEndAmount = bigNumberToDecimal(auctionInput.endAmount, inDecimals);
+  const inExecutionAmount = bigNumberToDecimal(input.amount, inDecimals);
 
-  const outDecimal = ERC20[chainId][outputs[0].token].decimals;
+  const outInfo = ERC20[chainId][outputs[0].token];
+  const outDecimals = outInfo ? outInfo.decimals : 18;
   const outStartAmount = bigNumberToDecimal(
     auctionOutputs.map((output) => output.startAmount).reduce((a, b) => a.add(b), BigNumber.from(0)),
-    outDecimal,
+    outDecimals,
   );
-  // const outOverriddenStartAmount = bigNumberToDecimal(
-  //   auctionOutputOverrides.reduce((a, b) => a.add(b), BigNumber.from(0)),
-  //   outDecimal,
-  // );
   const outExecutionAmount = bigNumberToDecimal(
     outputs.map((output) => output.amount).reduce((a, b) => a.add(b), BigNumber.from(0)),
-    outDecimal,
+    outDecimals,
   );
   const outEndAmount = bigNumberToDecimal(
     auctionOutputs.map((output) => output.endAmount).reduce((a, b) => a.add(b), BigNumber.from(0)),
-    outDecimal,
+    outDecimals,
   );
 
   let executionPercentage: Decimal | null = null;
