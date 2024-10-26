@@ -35,6 +35,10 @@ export const BINANCE_SYMBOL_INFO: Record<string, { spread: Decimal; precision: D
     spread: new Decimal(0.00000001),
     precision: new Decimal(0.00000001),
   },
+  'ARB/ETH': {
+    spread: new Decimal(0.0000002),
+    precision: new Decimal(0.0000001),
+  },
   'USDC/USDT': {
     spread: new Decimal(0.0001),
     precision: new Decimal(0.0001),
@@ -99,19 +103,19 @@ export const BINANCE_SYMBOL_INFO: Record<string, { spread: Decimal; precision: D
     spread: new Decimal(0.00000002),
     precision: new Decimal(0.00000001),
   },
-  'MATIC/USDT': {
+  'POL/USDT': {
     spread: new Decimal(0.0001),
     precision: new Decimal(0.0001),
   },
-  'MATIC/USDC': {
+  'POL/USDC': {
     spread: new Decimal(0.0004),
     precision: new Decimal(0.0001),
   },
-  'MATIC/BTC': {
+  'POL/BTC': {
     spread: new Decimal(0.00000002),
     precision: new Decimal(0.00000001),
   },
-  'MATIC/ETH': {
+  'POL/ETH': {
     spread: new Decimal(0.0000008),
     precision: new Decimal(0.0000001),
   },
@@ -135,74 +139,58 @@ export const BINANCE_SYMBOL_INFO: Record<string, { spread: Decimal; precision: D
     spread: new Decimal(0.006),
     precision: new Decimal(0.001),
   },
-  // 'LPT/USDC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
-  // 'LPT/BTC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
+  'LPT/BTC': {
+    spread: new Decimal(0.0000003),
+    precision: new Decimal(0.0000001),
+  },
   'ENS/USDT': {
     spread: new Decimal(0.01),
     precision: new Decimal(0.01),
   },
-  // 'ENS/USDC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
-  // 'ENS/BTC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
+  'ENS/USDC': {
+    spread: new Decimal(0.04),
+    precision: new Decimal(0.01),
+  },
+  'ENS/BTC': {
+    spread: new Decimal(0.0000002),
+    precision: new Decimal(0.0000001),
+  },
   '1INCH/USDT': {
     spread: new Decimal(0.0001),
     precision: new Decimal(0.0001),
   },
-  // '1INCH/USDC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
-  // '1INCH/BTC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
+  '1INCH/BTC': {
+    spread: new Decimal(0.00000001),
+    precision: new Decimal(0.00000001),
+  },
   'COMP/USDT': {
     spread: new Decimal(0.02),
     precision: new Decimal(0.01),
   },
-  // 'COMP/USDC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
-  // 'COMP/BTC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
+  'COMP/BTC': {
+    spread: new Decimal(0.000002),
+    precision: new Decimal(0.000001),
+  },
   'GRT/USDT': {
     spread: new Decimal(0.0001),
     precision: new Decimal(0.0001),
   },
-  // 'GRT/USDC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
-  // 'GRT/BTC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
+  'GRT/BTC': {
+    spread: new Decimal(0.00000001),
+    precision: new Decimal(0.00000001),
+  },
+  'GRT/ETH': {
+    spread: new Decimal(0.00000014),
+    precision: new Decimal(0.00000001),
+  },
   'AXL/USDT': {
     spread: new Decimal(0.0001),
     precision: new Decimal(0.0001),
   },
-  // 'AXL/USDC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
-  // 'AXL/BTC': {
-  //   spread: new Decimal(0),
-  //   precision: new Decimal(0),
-  // },
+  'AXL/BTC': {
+    spread: new Decimal(0.00000002),
+    precision: new Decimal(0.00000001),
+  },
   'ZRO/USDT': {
     spread: new Decimal(0.001),
     precision: new Decimal(0.001),

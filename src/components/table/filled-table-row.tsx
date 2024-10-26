@@ -55,8 +55,9 @@ export default function FilledTableRow(props: FilledTableRowProps): JSX.Element 
     outAmount,
   );
   const price = token1Amount.div(token0Amount);
-  const inNameOfBinance = inName === 'WETH' ? 'ETH' : inName === 'WBTC' ? 'BTC' : inName;
-  const outNameOfBinance = outName === 'WETH' ? 'ETH' : outName === 'WBTC' ? 'BTC' : outName;
+  const inNameOfBinance = inName === 'WETH' ? 'ETH' : inName === 'WBTC' ? 'BTC' : inName === 'MATIC' ? 'POL' : inName;
+  const outNameOfBinance =
+    outName === 'WETH' ? 'ETH' : outName === 'WBTC' ? 'BTC' : outName === 'MATIC' ? 'POL' : outName;
   const token0And1OfBinance = orderTokenNames(inNameOfBinance, outNameOfBinance);
 
   useEffect(() => {
