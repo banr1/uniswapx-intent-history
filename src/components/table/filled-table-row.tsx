@@ -7,14 +7,9 @@ import { useEffect, useState } from 'react';
 
 import HashCell from '@/components/cell/hash-cell';
 import { TableRow, TableCell } from '@/components/ui/table';
+import { BINANCE_TOKEN_TRANSFORM } from '@/constants/binance-symbol-transform';
 import { ERC20 } from '@/constants/erc20';
-import {
-  bigNumberToDecimal,
-  formatTimestamp,
-  numToDate,
-  orderTokenNames,
-  orderTokenNamesAndAmounts,
-} from '@/lib/utils';
+import { bigNumberToDecimal, formatTimestamp, numToDate, orderTokenNamesAndAmounts } from '@/lib/utils';
 import { ChainId } from '@/types/chain-id';
 import { FilledCosignedV2DutchOrder } from '@/types/dutch-intent-v2';
 
@@ -55,13 +50,11 @@ export default function FilledTableRow(props: FilledTableRowProps): JSX.Element 
     outAmount,
   );
   const price = token1Amount.div(token0Amount);
-  const inNameOfBinance = inName === 'WETH' ? 'ETH' : inName === 'WBTC' ? 'BTC' : inName === 'MATIC' ? 'POL' : inName;
-  const outNameOfBinance =
-    outName === 'WETH' ? 'ETH' : outName === 'WBTC' ? 'BTC' : outName === 'MATIC' ? 'POL' : outName;
-  const token0And1OfBinance = orderTokenNames(inNameOfBinance, outNameOfBinance);
+  const token0OfBinance = BINANCE_TOKEN_TRANSFORM[token0Name] || token0Name;
+  const token1OfBinance = BINANCE_TOKEN_TRANSFORM[token1Name] || token1Name;
 
   useEffect(() => {
-    const pairOfBinance = token0And1OfBinance.join('');
+    const pairOfBinance = `${token0OfBinance}${token1OfBinance}`;
     const executedTime = executedAt * 1000;
     const fetchData = async () => {
       const response = await axios.get(
@@ -76,7 +69,7 @@ export default function FilledTableRow(props: FilledTableRowProps): JSX.Element 
       setBinancePrice(price);
     };
     fetchData();
-  }, [token0And1OfBinance, executedAt]);
+  }, [token0OfBinance, token1OfBinance, executedAt]);
 
   return (
     <TableRow key={intent.hash()}>
@@ -86,13 +79,13 @@ export default function FilledTableRow(props: FilledTableRowProps): JSX.Element 
       <HashCell value={filler} chainId={chainId} category='wallet' />
       <SwapCell input={input} outputs={outputs} chainId={chainId} />
       <PriceCell price={price} token0And1={[token0Name, token1Name]} side={side} />
-      <BinancePriceCell price={binancePrice} token0And1={token0And1OfBinance} />
+      <BinancePriceCell price={binancePrice} token0And1={[token0OfBinance, token1OfBinance]} />
       {/* <PriceGapCell price={price} side={side} binancePrice={binancePrice} /> */}
       <ReasonableIndexCell
         price={price}
         side={side}
         binancePrice={binancePrice}
-        binanceToken0and1={token0And1OfBinance}
+        binanceToken0and1={[token0OfBinance, token1OfBinance]}
       />
       <BidTimingCell
         input={input}

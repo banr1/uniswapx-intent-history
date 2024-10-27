@@ -1,9 +1,12 @@
+// constants/token-priority.ts
+
 // the more to the bottom, the more priority
 export const SYMBOL_PRIORITY: string[] = [
   // stable
   'DAI',
   'USDT',
   'USDC',
+  'USDC.e',
   'TAP',
   'TUSD',
   'USDY',
