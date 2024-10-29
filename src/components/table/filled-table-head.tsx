@@ -11,11 +11,11 @@ export default function FilledTableHead(): JSX.Element {
       <TableHead className='w-auto'>Filler</TableHead>
       <TableHead className='w-auto'>Swap</TableHead>
       <TableHead className='w-auto'>Price</TableHead>
-      <TableHead className='w-auto'>
+      {/* <TableHead className='w-auto'>
         Price <span className='text-xs'>(Binance)</span>
-      </TableHead>
+      </TableHead> */}
       {/* <TableHead className='w-auto'>Price Gap</TableHead> */}
-      <TableHead className='w-auto'>Reasonable Index</TableHead>
+      {/* <TableHead className='w-auto'>Reasonable Index</TableHead> */}
       <TableHead className='w-auto'>Bid Timing</TableHead>
       <TableHead className='w-auto'>Fee</TableHead>
       <TableHead className='w-auto'>Liquidity Source</TableHead>

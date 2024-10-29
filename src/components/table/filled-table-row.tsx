@@ -14,10 +14,8 @@ import { ChainId } from '@/types/chain-id';
 import { FilledCosignedV2DutchOrder } from '@/types/dutch-intent-v2';
 
 import BidTimingCell from '../cell/bid-timing-cell';
-import BinancePriceCell from '../cell/binance-price-cell';
 import FeeCell from '../cell/fee-cell';
 import PriceCell from '../cell/price-cell';
-import ReasonableIndexCell from '../cell/reasonable-index-cell';
 import SwapCell from '../cell/swap-cell';
 
 interface FilledTableRowProps {
@@ -79,14 +77,14 @@ export default function FilledTableRow(props: FilledTableRowProps): JSX.Element 
       <HashCell value={filler} chainId={chainId} category='wallet' />
       <SwapCell input={input} outputs={outputs} chainId={chainId} />
       <PriceCell price={price} token0And1={[token0Name, token1Name]} side={side} />
-      <BinancePriceCell price={binancePrice} token0And1={[token0OfBinance, token1OfBinance]} />
+      {/* <BinancePriceCell price={binancePrice} token0And1={[token0OfBinance, token1OfBinance]} /> */}
       {/* <PriceGapCell price={price} side={side} binancePrice={binancePrice} /> */}
-      <ReasonableIndexCell
+      {/* <ReasonableIndexCell
         price={price}
         side={side}
         binancePrice={binancePrice}
         binanceToken0and1={[token0OfBinance, token1OfBinance]}
-      />
+      /> */}
       <BidTimingCell
         input={input}
         auctionInput={auctionInput}
